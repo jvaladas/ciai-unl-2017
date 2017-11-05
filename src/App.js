@@ -1,12 +1,70 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
+import {Link, Switch, Route} from 'react-router-dom';
 
 
-class Register extends Component {
+class App extends Component {
+  render(){
+    return (
+      <div>
+        <Header></Header>
+        <Switch>
+          <Route exact path='/' component={Dashboard}/>
+          <Route path='/signup' component={Register}/>
+        </Switch>
+        <Footer></Footer>
+      </div>
+    );
+  }
+}
+
+
+
+class Header extends React.Component {
+  render() {
+    return (
+      <div className="navigation-bar">
+        <span id="store-name">
+          <Link to="/" style={{color:'black', textDecoration:'none'}}>
+            Store Name
+          </Link>
+        </span>
+        <ul className="navigation-list" >
+          <li >Option 1</li>
+          <li >Option 2</li>
+          <li>
+            <Link to="/signup" style={{color:'black', textDecoration:'none'}}>
+              Sign up
+            </Link>
+          </li>
+        </ul>
+        This is header
+      </div>
+    )
+  }
+}
+
+class Footer extends React.Component {
+  render(){
+    return (
+      <div>This is footer</div>
+    )
+  }
+}
+
+class Dashboard extends React.Component {
+  render() {
+    return (
+      <div>This is Dashboard</div>
+    )
+  }
+}
+
+
+
+class Register extends React.Component {
   constructor(props){
     super(props);
     this.state={
@@ -23,9 +81,6 @@ class Register extends Component {
       <div>
         <MuiThemeProvider>
           <div>
-          <AppBar
-             title="Register"
-           />
            <TextField
              hintText="Enter your First Name"
              floatingLabelText="First Name"
@@ -79,4 +134,4 @@ const style = {
   margin: 15,
 };
 
-export default Register;
+export default App;

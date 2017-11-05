@@ -1,5 +1,60 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+.navigation-bar {
+  width:100%;
+  top: 0;
+  position: fixed;
+  z-index:100;
+  background-color:rgba(220,220,220,0.8);
+  box-shadow: 2px -15px 20px -22px rgba(0,0,0,0.35), 2px 15px 20px -22px rgba(0,0,0,0.35);
+}
+
+#store-name {
+  font-size:23px;
+  padding:19px 18px 5px 45px;
+  cursor:pointer;
+  transition:opacity 0.2s ease;
+  display:inline-block;
+}
+
+#store-name:hover, .navigation-list li:hover {
+  opacity:0.6;
+}
+
+#store-name:hover::after, .navigation-list li:hover::after {
+  width:100%;
+}
+
+#store-name::after, .navigation-list li::after {
+  content:'';
+  display: block;
+  width:0;
+  height: 3px;
+  background:#5c6bc0;
+  transition: width .2s;
+  margin-top:5px;
+}
+
+.navigation-list {
+  float:right;
+  padding-right:25px;
+}
+
+.navigation-list li {
+  display:inline-block;
+  cursor:pointer;
+  padding-right:20px;
+  padding-top:5px;
+}
+
+li {
+  list-style-type:none;
+}
+
+Link{
+  textDecoration: 'none';
 }
