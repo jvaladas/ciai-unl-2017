@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
-import {Link, Switch, Route} from 'react-router-dom';
+import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
 
 
 class App extends Component {
@@ -10,10 +10,14 @@ class App extends Component {
     return (
       <div>
         <Header></Header>
+        
+        <div className="fix-space"></div>
+        
         <Switch>
           <Route exact path='/' component={Dashboard}/>
           <Route path='/signup' component={Register}/>
         </Switch>
+
         <Footer></Footer>
       </div>
     );
@@ -21,23 +25,22 @@ class App extends Component {
 }
 
 
-
-class Header extends React.Component {
+class Header extends Component {
   render() {
     return (
       <div className="navigation-bar">
         <span id="store-name">
-          <Link to="/" style={{color:'black', textDecoration:'none'}}>
+          <NavLink to="/" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
             Store Name
-          </Link>
+          </NavLink>
         </span>
         <ul className="navigation-list" >
           <li >Option 1</li>
           <li >Option 2</li>
           <li>
-            <Link to="/signup" style={{color:'black', textDecoration:'none'}}>
+            <NavLink to="/signup" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
               Sign up
-            </Link>
+            </NavLink>
           </li>
         </ul>
         This is header
@@ -57,12 +60,50 @@ class Footer extends React.Component {
 class Dashboard extends React.Component {
   render() {
     return (
-      <div>This is Dashboard</div>
+      <div>
+        This is Dashboard
+
+      <ListFilters></ListFilters>
+      <DashboardList></DashboardList>
+
+      </div>
     )
   }
 }
 
+class ListFilters extends React.Component {
+  render() {
+    return (
+      <div>This is list filters</div>
+    )
+  }
+}
 
+class DashboardList extends React.Component {
+  render() {
+    return (
+      <ul>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+      </ul>
+    )
+  }
+}
+
+class DashboardListItem extends React.Component {
+  render() {
+    return (
+      <div>This is dashboard list item </div>
+    )
+  }
+}
 
 class Register extends React.Component {
   constructor(props){
@@ -74,7 +115,6 @@ class Register extends React.Component {
       password:''
     }
   }
-
   
   render() {
     return (
@@ -115,23 +155,21 @@ class Register extends React.Component {
   }
 
   handleClick(event){
-
     console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var self = this;
-    var payload={
-    "first_name": this.state.first_name,
-    "last_name":this.state.last_name,
-    "email":this.state.email,
-    "password":this.state.password
+    var payload = { 
+      "first_name": this.state.first_name,
+      "last_name":this.state.last_name,
+      "email":this.state.email,
+      "password":this.state.password
     }
-    
-  }
   }
 
+}
 
 const style = {
   margin: 15,
 };
 
-export default App;
+export default withRouter(App);
