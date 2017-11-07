@@ -11,8 +11,6 @@ class App extends Component {
       <div>
         <Header></Header>
         
-        <div className="fix-space"></div>
-        
         <Switch>
           <Route exact path='/' component={Dashboard}/>
           <Route path='/signup' component={Register}/>
@@ -61,10 +59,10 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        This is Dashboard
-
-      <ListFilters></ListFilters>
-      <DashboardList></DashboardList>
+        <img src="https://www.stationgallery.ca/wp-content/uploads/2017/05/Coppa-Gallery-2.jpg"></img>
+        <div id="dashboard-text">Your very own art gallery.</div>
+        <ListFilters></ListFilters>
+        <DashboardList></DashboardList>
 
       </div>
     )
@@ -121,6 +119,7 @@ class Register extends React.Component {
       <div>
         <MuiThemeProvider>
           <div>
+            <div class="fix-space"></div>
            <TextField
              hintText="Enter your First Name"
              floatingLabelText="First Name"
