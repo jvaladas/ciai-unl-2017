@@ -3,6 +3,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
 import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
+import validator from 'validator';
+import Form from 'react-validation/build/form';
+import Input from 'react-validation/build/input';
 
 
 class App extends Component {
@@ -111,13 +114,39 @@ class Register extends React.Component {
       first_name:'',
       last_name:'',
       email:'',
-      password:''
+      password:'',
     }
   }
+
   
   render() {
     return (
       <div>
+      
+      <MuiThemeProvider>
+        <div>
+        <Form>
+        <div>
+                <label>
+                    Email*
+                    <Input value='email@email.com' name='email' validations={[required, email]}/>
+                </label>
+            </div>
+            <div>
+                <label>
+                    Password*
+                    <Input type='password' name='password' validations={[required]}/>
+                </label>
+            </div>
+            <div>
+                <RaisedButton>Submit</RaisedButton>
+            </div>
+        </Form>
+        </div>
+         </MuiThemeProvider>
+      </div>
+      /*<div>
+        
         <MuiThemeProvider>
           <div>
             <div class="fix-space"></div>
@@ -150,7 +179,7 @@ class Register extends React.Component {
            <RaisedButton label="Register" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
           </div>
          </MuiThemeProvider>
-      </div>
+      </div>*/
     );
   }
 
@@ -165,10 +194,15 @@ class Register extends React.Component {
       "password":this.state.password
     }
 
-    window.location.href ="/login"
+    /*if(payload.email!="" && payload.first_name!="" && payload.password!="" && payload.last_name!="")
+      window.location.href ="/login"*/
     
 
   }
+
+
+  
+
 
 }
 
@@ -176,15 +210,19 @@ class Login extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      first_name:'',
-      last_name:'',
-      email:'',
-      password:''
+      first_name: this.props.first_name,
+      last_name:this.props.last_name,
+      email:this.props.email,
+      password:this.props.password
     }
+
+    console.log(this.state.first_name);
+
   }
   
   render() {
     return (
+      
       <div>
         <MuiThemeProvider>
           <div>
@@ -219,13 +257,45 @@ class Login extends React.Component {
       "last_name":this.state.last_name,
       "email":this.state.email,
       "password":this.state.password
-    }
-    
-  
-
+    } 
   }
-
 }
+
+
+//Validations
+const required = (value) => {
+  if (!value.toString().trim().length) {
+    // We can return string or jsx as the 'error' prop for the validated Component
+    return 'require';
+  }
+};
+ 
+const email = (value) => {
+  if (!validator.isEmail(value)) {
+    return `${value} is not a valid email.`
+  }
+};
+ 
+const lt = (value, props) => {
+  // get the maxLength from component's props
+  if (!value.toString().trim().length > props.maxLength) {
+    // Return jsx
+    return <span className="error">The value exceeded {props.maxLength} symbols.</span>
+  }
+};
+ 
+const password = (value, props, components) => {
+  // NOTE: Tricky place. The 'value' argument is always current component's value.
+  // So in case we're 'changing' let's say 'password' component - we'll compare it's value with 'confirm' value.
+  // But if we're changing 'confirm' component - the condition will always be true
+  // If we need to always compare own values - replace 'value' with components.password[0].value and make some magic with error rendering.
+  if (value !== components['confirm'][0].value) { // components['password'][0].value !== components['confirm'][0].value
+    // 'confirm' - name of input
+    // components['confirm'] - array of same-name components because of checkboxes and radios
+    return <span className="error">Passwords are not equal.</span>
+  }
+};  
+
 
 
 
