@@ -182,7 +182,7 @@ class Register extends React.Component {
              onChange = {(event,newValue) => this.setState({password:newValue})}
              />
            <br/>
-           <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event, this.props)}/>
+           <RaisedButton label="Register" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
           </div>
          </MuiThemeProvider>
       </div>
@@ -204,6 +204,63 @@ class Register extends React.Component {
   }
 
 }
+
+class Login extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      first_name:'',
+      last_name:'',
+      email:'',
+      password:''
+    }
+  }
+  
+  render() {
+    return (
+      <div>
+        <MuiThemeProvider>
+          <div>
+            <div class="fix-space"></div>
+           <TextField
+             hintText="Enter your Email"
+             type="email"
+             floatingLabelText="Email"
+             onChange = {(event,newValue) => this.setState({email:newValue})}
+             />
+           <br/>
+           <TextField
+             type = "password"
+             hintText="Enter your Password"
+             floatingLabelText="Password"
+             onChange = {(event,newValue) => this.setState({password:newValue})}
+             />
+           <br/>
+           <RaisedButton label="Login" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+          </div>
+         </MuiThemeProvider>
+      </div>
+    );
+  }
+
+  handleClick(event){
+    console.log("values",this.state.email,this.state.password);
+    //To be done:check for empty values before hitting submit
+    var self = this;
+    var payload = { 
+      "first_name": this.state.first_name,
+      "last_name":this.state.last_name,
+      "email":this.state.email,
+      "password":this.state.password
+    }
+    
+  
+
+  }
+
+}
+
+
 
 const style = {
   margin: 15,
