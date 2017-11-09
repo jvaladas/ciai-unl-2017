@@ -4,17 +4,51 @@ import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
 import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
 
-
 class App extends Component {
+  
+  constructor(props){
+    super(props);
+    this.state={
+        currentUser: {
+          "FirstName":"Andre",
+          "LastName":"Maria",
+          "Email": "andre@aol.com.br",
+          "Password": "123"
+        },
+        articles: [
+          {
+            "Name":"Painting 1",
+            "Description":"This was something I imagined."
+          },
+          {
+            "Name":"MMMMGGNNGNNGNN",
+            "Description":"anfsiuasnbkjulodaso"
+          },
+          {
+            "Name":"aaavavavavvava",
+            "Description":"aiubcmkbcvm,cbvm,bmc,vm"
+          }
+        ],
+        users: [
+          {
+            "FirstName":"Andre",
+            "LastName":"Maria",
+            "Email": "andre@aol.com.br",
+            "Password": "123"
+          }
+        ]
+    }
+  }
+  
   render(){
     return (
       <div>
-        <Header></Header>
+        <Header userName={this.state.currentUser.FirstName}></Header>
         
         <Switch>
           <Route exact path='/' component={Dashboard}/>
-          <Route path='/signup' component={Register}/>
-          <Route path='/login' component={Login}/>
+          <Route path='/signup' render={(props) => ( <Register users={this.state.users}
+            updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
         </Switch>
 
         <Footer></Footer>
@@ -25,6 +59,7 @@ class App extends Component {
 
 
 class Header extends Component {
+
   render() {
     return (
       <div className="navigation-bar">
@@ -34,8 +69,8 @@ class Header extends Component {
           </NavLink>
         </span>
         <ul className="navigation-list" >
-          <li >Option 1</li>
-          <li >Option 2</li>
+          <li>Option 1</li>
+          <li>{this.props.userName}</li>
           <li>
             <NavLink to="/signup" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
               Sign up
@@ -120,7 +155,7 @@ class Register extends React.Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <div class="fix-space"></div>
+            <div className="fix-space"></div>
            <TextField
              hintText="Enter your First Name"
              floatingLabelText="First Name"
@@ -155,19 +190,17 @@ class Register extends React.Component {
   }
 
   handleClick(event){
-    console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
+    //console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var self = this;
     var payload = { 
-      "first_name": this.state.first_name,
-      "last_name":this.state.last_name,
-      "email":this.state.email,
-      "password":this.state.password
+      "FirstName": this.state.first_name,
+      "LastName":this.state.last_name,
+      "Email":this.state.email,
+      "Password":this.state.password
     }
-
-    window.location.href ="/login"
-    
-
+    this.props.updateUsers(payload);
+    window.location.href = "/";
   }
 
 }
