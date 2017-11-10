@@ -257,15 +257,15 @@ class Login extends React.Component {
     console.log("values",this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var self = this;
-    var payload = { 
-      "first_name": this.state.first_name,
-      "last_name":this.state.last_name,
-      "email":this.state.email,
-      "password":this.state.password
+    var newUser = { 
+      "first_name": self.state.first_name,
+      "last_name":self.state.last_name,
+      "email":self.state.email,
+      "password":self.state.password
     }
     
-  
-
+    self.props.updateUsers(newUser);
+    window.location.href = "/";
   }
 
 }
