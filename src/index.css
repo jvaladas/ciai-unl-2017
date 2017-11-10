@@ -64,18 +64,23 @@ li {
 }
 
 .fix-space{
-  padding-top:70px;
+  padding-top:62px;
 }
 
 #dashboard-text {
   position: absolute;
   top: 293px;
   right: 75px;
-  font-size: 39px;
+  font-size: 28px;
   font-weight: 500;
-  padding: 11px 21px;
-  background-color: rgba(250,250,250,0.60);
   box-shadow: 2px -15px 20px -22px rgba(0,0,0,0.35), 2px 15px 20px -22px rgba(0,0,0,0.35);
+}
+
+#dashboard-text .text-item {
+  padding:0px 10px;
+  color: white;
+  background-color:rgba(70,70,70,0.4);
+  width:fit-content;
 }
 
 #dashboard-image {
@@ -90,10 +95,6 @@ h1{
   color:black;
   font-weight:600;
   font-size:24px;
-}
-.underline-word {
-  border-bottom: 4px solid #5c6bc0;
-  padding-bottom: 5px;
 }
 .category-item {
   padding:0px 20px 0px 0px;

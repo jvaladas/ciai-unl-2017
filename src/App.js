@@ -159,6 +159,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+        <div className="fix-space"></div>
 		<div id="myCarousel" className="carousel slide" data-ride="carousel">
 			<ol className="carousel-indicators">
 				<li data-target="#myCarousel" data-slide-to="0" className="active"></li>
@@ -166,11 +167,14 @@ class Dashboard extends React.Component {
 			</ol>
 			<div className="carousel-inner">
 				<div className="item active">
-					<img src={require('./assets/018.jpg')} alt="" style={imgstyle}/>
+					<img src={require('./assets/018.jpg')} alt="dashboard-image-1" style={imgstyle}/>
 				</div>
 				<div className="item">
-					<img src={require('./assets/017.jpg')} alt="" style={imgstyle}/>
+					<img src={require('./assets/017.jpg')} alt="dashboard-image-2" style={imgstyle}/>
 				</div>
+        <div className="item">
+          <img src={require('./assets/20.jpg')} alt="dashboard-image-3" style={imgstyle}/>
+        </div>
 			</div>
 
 			<a className="left carousel-control" href="#myCarousel" data-slide="prev">
@@ -183,7 +187,10 @@ class Dashboard extends React.Component {
 			</a>
 			
 		</div>
-        <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
+        <div id="dashboard-text">
+          <div className="text-item" >Your very own art gallery, </div>
+          <div className="text-item" >wherever you are.</div>
+        </div>
         <div className="container">
           <ListFilters filterName="all"></ListFilters>
           <ListFilters filterName="category"></ListFilters>
@@ -553,6 +560,7 @@ const imgstyle = {
 	height: 390,
     display: 'block',
     margin: 'auto',
+    width:'100%'
 
 };
 
