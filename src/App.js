@@ -106,29 +106,28 @@ class Header extends Component {
     return (
       <div className="navigation-bar">
         <span id="store-name">
-          <NavLink to="/" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+          <NavLink to="/" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
             Store Name
           </NavLink>
         </span>
         <ul className="navigation-list" >
           <li>
-            <NavLink to="/article" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+            <NavLink to="/article" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
               Article Details
             </NavLink>
           </li>
           <li>Option 1</li>
           <li>
-            <NavLink to="/account" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+            <NavLink to="/account" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
               {this.props.userName}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/signup" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+            <NavLink to="/signup" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
               Sign up
             </NavLink>
           </li>
         </ul>
-        This is header
       </div>
     )
   }
@@ -159,6 +158,10 @@ class Dashboard extends React.Component {
           <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
           <ListFilters filterName="price"></ListFilters>
+          <div className="fix-space"></div>
+          <div className="fix-space"></div>
+          <div className="fix-space"></div>
+          <div className="fix-space"></div>
           <div className="fix-space"></div>
         </div>
       </div>
@@ -240,7 +243,7 @@ class DashboardListItem extends React.Component {
         <MuiThemeProvider>
             <Paper onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}
               id="paper-container" style={paperStyle} zDepth={this.state.shadow}>
-              <img class="article-image" src={this.props.imgUrl} alt="article-image"></img>
+              <img className="article-image" src={this.props.imgUrl} alt="article-image"></img>
               <div id="article-name">{this.props.name}</div>
               <div id="article-description">{this.props.description}</div>
             </Paper>
@@ -461,7 +464,25 @@ class ImageUpload extends React.Component {
 }
 
 class ArticleDetails extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      comment:'',
+      rating:''
+    }
+  }
 
+  render() {
+    return (
+      <div id="article-wrapper">
+        <div className="container">
+          <div className="content-wrapper">
+            <h1>Article Details #{this.props.id}</h1>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 
