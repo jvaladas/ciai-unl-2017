@@ -6,6 +6,7 @@ import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import './App.css';
 
 class App extends Component {
   
@@ -119,7 +120,30 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <img id="dashboard-image" src={require('./assets/018.jpg')} alt="background-image"></img>
+		<div id="myCarousel" className="carousel slide" data-ride="carousel">
+			<ol className="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" className="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+			</ol>
+			<div className="carousel-inner">
+				<div className="item active">
+					<img src={require('./assets/018.jpg')} alt="" style={imgstyle}/>
+				</div>
+				<div className="item">
+					<img src={require('./assets/017.jpg')} alt="" style={imgstyle}/>
+				</div>
+			</div>
+
+			<a className="left carousel-control" href="#myCarousel" data-slide="prev">
+				<span className="glyphicon glyphicon-chevron-left"></span>
+				<span className="sr-only">Previous</span>
+			</a>
+			<a className="right carousel-control" href="#myCarousel" data-slide="next">
+				<span className="glyphicon glyphicon-chevron-right"></span>
+				<span className="sr-only">Next</span>
+			</a>
+			
+		</div>
         <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
         <div className="container">
           <ListFilters></ListFilters>
@@ -193,7 +217,7 @@ class Register extends React.Component {
   
   render() {
     return (
-      <div>
+      <div className="register-form">
         <MuiThemeProvider>
           <div>
             <div className="fix-space"></div>
@@ -343,6 +367,13 @@ class Account extends React.Component{
 
 const style = {
   margin: 15,
+};
+
+const imgstyle = {
+	height: 390,
+    display: 'block',
+    margin: 'auto',
+
 };
 
 export default withRouter(App);
