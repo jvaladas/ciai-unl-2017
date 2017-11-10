@@ -97,13 +97,8 @@ class App extends Component {
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
-<<<<<<< HEAD
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
             updateArt={(newArt) => this.setState({ users: this.state.articles.concat(newArt) })} />)}/>
-=======
-          <Route path='/account' render={(props) => (<Account currentUser={this.state.currentUser}/>)}/>
-          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
->>>>>>> 0cb48150b9629fde559621ee0fb2808380851bf9
         </Switch>
 
         <Footer></Footer>
