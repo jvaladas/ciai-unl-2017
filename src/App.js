@@ -218,13 +218,13 @@ class Register extends React.Component {
     //console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var self = this;
-    var payload = { 
+    var newUser = { 
       "FirstName": this.state.first_name,
       "LastName":this.state.last_name,
       "Email":this.state.email,
       "Password":this.state.password
     }
-    this.props.updateUsers(payload);
+    this.props.updateUsers(newUser);
     window.location.href = "/";
   }
 
