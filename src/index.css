@@ -9,7 +9,7 @@ body {
   top: 0;
   position: fixed;
   z-index:100;
-  background-color:rgba(230,230,220,0.6);
+  background-color: rgba(250,250,250,0.60);
   box-shadow: 2px -15px 20px -22px rgba(0,0,0,0.35), 2px 15px 20px -22px rgba(0,0,0,0.35);
 }
 
@@ -44,8 +44,9 @@ body {
 }
 
 .navigation-list {
-  float:right;
-  padding-right:25px;
+  float: right;
+  padding-top: 13px;
+  padding-right: 30px;
 }
 
 .navigation-list li {
@@ -64,11 +65,34 @@ li {
 }
 
 #dashboard-text {
-  position:absolute;
-  top: 129px;
-  left: 589px;
-  color: white;
-  font-size: 56px;
+  position: absolute;
+  top: 293px;
+  right: 75px;
+  font-size: 39px;
+  font-weight: 500;
   padding: 11px 21px;
-  background-color: rgba(100,100,100,0.23);
+  background-color: rgba(250,250,250,0.60);
+  box-shadow: 2px -15px 20px -22px rgba(0,0,0,0.35), 2px 15px 20px -22px rgba(0,0,0,0.35);
+}
+
+.list-filters-container {
+  background-color: rgba(250,250,250,0.60);
+  box-shadow: 2px -15px 20px -22px rgba(0,0,0,0.35), 2px 15px 20px -22px rgba(0,0,0,0.35);
+  width: 58vw;
+  height: 94px;
+  position: relative;
+  top: -173px;
+}
+.filter-item{
+  padding:10px;
+  font-weight:600!important;
+  text-transform: uppercase;
+  font-size:14px;
+}
+#dashboard-image {
+
+}
+.underline-word {
+  border-bottom: 4px solid #5c6bc0;
+  padding-bottom: 5px;
 }

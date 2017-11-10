@@ -95,8 +95,8 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <img src="https://www.stationgallery.ca/wp-content/uploads/2017/05/Coppa-Gallery-2.jpg"></img>
-        <div id="dashboard-text">Your very own art gallery.</div>
+        <img id="dashboard-image" src="https://www.stationgallery.ca/wp-content/uploads/2017/05/Coppa-Gallery-2.jpg"></img>
+        <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
         <ListFilters></ListFilters>
         <DashboardList></DashboardList>
 
@@ -108,7 +108,32 @@ class Dashboard extends React.Component {
 class ListFilters extends React.Component {
   render() {
     return (
-      <div>This is list filters</div>
+      <div className="list-filters-container" >
+        <span className="filter-item">
+            <label>Name</label>
+            <select className="browser-default">
+              <option>123</option>
+              <option>345</option>
+              <option>456</option>
+            </select>
+        </span>
+        <span className="filter-item">
+          <label>Description</label>
+            <select className="browser-default">
+              <option>123</option>
+              <option>345</option>
+              <option>456</option>
+            </select>
+        </span>
+        <span className="filter-item">
+          <label>Category</label>
+            <select className="browser-default">
+              <option>123</option>
+              <option>345</option>
+              <option>456</option>
+            </select>
+        </span>
+      </div>
     )
   }
 }
