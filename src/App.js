@@ -92,7 +92,7 @@ class App extends Component {
     return (
       <div>
         <Header userName={this.state.currentUser.FirstName}></Header>
-        
+        <div className="fix-space"></div>
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
@@ -159,7 +159,6 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <div className="fix-space"></div>
 		<div id="myCarousel" className="carousel slide" data-ride="carousel">
 			<ol className="carousel-indicators">
 				<li data-target="#myCarousel" data-slide-to="0" className="active"></li>
@@ -307,7 +306,6 @@ class Register extends React.Component {
       <div className="register-form">
         <MuiThemeProvider>
           <div>
-            <div className="fix-space"></div>
            <TextField
              hintText="Enter your First Name"
              floatingLabelText="First Name"
@@ -370,7 +368,6 @@ class Login extends React.Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <div className="fix-space"></div>
            <TextField
              hintText="Enter your Email"
              type="email"
@@ -426,7 +423,6 @@ class Account extends React.Component{
         <MuiThemeProvider>
           
         <div>
-          <div className="fix-space"></div>
             <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
             <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
             <div>Email: <span>{this.props.currentUser.Email}</span></div>
