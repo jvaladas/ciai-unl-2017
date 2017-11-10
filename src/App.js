@@ -6,6 +6,7 @@ import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import './App.css';
 
 class App extends Component {
   
@@ -23,49 +24,57 @@ class App extends Component {
             "Name":"Higher Motion",
             "Description":"Painting, 35.4 H x 23.6 W x 0.8 in",
             "ImageUrl":"https://i.pinimg.com/originals/26/2d/a4/262da433a20602c80382fea94a8c1c26.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Portrait",
             "Description":"Painting, 23.6 H x 19.7 W x 0.8 in",
             "ImageUrl":"http://www.goddessofegypt.com/wp-content/uploads/2017/06/Abstract-Painting.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Impeccability of white",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
             "ImageUrl": "https://twistedsifter.files.wordpress.com/2014/06/fine-art-finger-paintings-by-iris-scott-3.jpg?w=800&h=800",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Afterglow",
             "Description":"Painting, 30 H x 24 W x 0.7 in",
             "ImageUrl": "https://images.fineartamerica.com/images-medium-large-5/blue-venice-dmitry-spiros.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Three Blue Vases",
             "Description":"Painting, 24 H x 30 W x 1.5 in",
             "ImageUrl": "https://images-na.ssl-images-amazon.com/images/I/91MzV6V79DL._SL1500_.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"The One With Sprinkes",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
             "ImageUrl": "http://poststudioarts.com/wp-content/uploads/2016/05/art-painting-vangoghrhonecom14.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Boating blues 2",
             "Description":"Painting, 24 H x 30 W x 1.5 in",
             "ImageUrl": "https://afremov.com/image.php?type=P&id=19255",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Woodland Creature III",
             "Description":"Painting, 30 H x 24 W x 0.7 in",
             "ImageUrl": "https://affordableartfair.com/media/cache/1/marketplace/17f82f742ffe127f42dca9de82fb58b1/fair/2/58d3eac4e5b4c.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           }
         ],
         users: [
@@ -73,8 +82,7 @@ class App extends Component {
             "FirstName":"Andre",
             "LastName":"Maria",
             "Email": "andre@aol.com.br",
-            "Password": "123",
-            "Art":[]
+            "Password": "123"
           }
         ]
     }
@@ -89,8 +97,8 @@ class App extends Component {
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
-          <Route path='/account' render={(props) => (<Account currentUser={this.state.currentUser}/>)}/>
-          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
+          <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
+            updateArt={(newArt) => this.setState({ users: this.state.articles.concat(newArt) })} />)}/>
         </Switch>
 
         <Footer></Footer>
@@ -151,7 +159,30 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <img id="dashboard-image" src={require('./assets/018.jpg')} alt="background-image"></img>
+		<div id="myCarousel" className="carousel slide" data-ride="carousel">
+			<ol className="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" className="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+			</ol>
+			<div className="carousel-inner">
+				<div className="item active">
+					<img src={require('./assets/018.jpg')} alt="" style={imgstyle}/>
+				</div>
+				<div className="item">
+					<img src={require('./assets/017.jpg')} alt="" style={imgstyle}/>
+				</div>
+			</div>
+
+			<a className="left carousel-control" href="#myCarousel" data-slide="prev">
+				<span className="glyphicon glyphicon-chevron-left"></span>
+				<span className="sr-only">Previous</span>
+			</a>
+			<a className="right carousel-control" href="#myCarousel" data-slide="next">
+				<span className="glyphicon glyphicon-chevron-right"></span>
+				<span className="sr-only">Next</span>
+			</a>
+			
+		</div>
         <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
         <div className="container">
           <ListFilters filterName="all"></ListFilters>
@@ -265,7 +296,7 @@ class Register extends React.Component {
   
   render() {
     return (
-      <div>
+      <div className="register-form">
         <MuiThemeProvider>
           <div>
             <div className="fix-space"></div>
@@ -373,8 +404,13 @@ class Account extends React.Component{
       first_name:'',
       last_name:'',
       email:'',
-      password:''
-    }
+      password:'',
+      artName:'',
+      artDescription:'',
+      imageUrl: '',
+      category:'',
+      autor:this.props.currentUser.Email}
+    
   }
 
     render() {  
@@ -386,7 +422,30 @@ class Account extends React.Component{
             <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
             <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
             <div>Email: <span>{this.props.currentUser.Email}</span></div>
-            <ul>
+            <div>
+            <TextField
+             hintText="Enter article's name"
+             floatingLabelText="Article name"
+             onChange = {(event,newValue) => this.setState({artname:newValue})}
+             />
+           <br/>
+           <TextField
+             hintText="Enter the article's description"
+             floatingLabelText="Description"
+             onChange = {(event,newValue) => this.setState({artDescription:newValue})}
+             />
+           <br/>
+           <TextField
+             hintText="Enter Category"
+             type="category"
+             floatingLabelText="Category"
+             onChange = {(event,newValue) => this.setState({category:newValue})}
+             />
+           <br/>
+           
+           <br/>
+            </div>
+       <ul>
         <li>
           <DashboardListItem></DashboardListItem>
         </li>
@@ -488,6 +547,13 @@ class ArticleDetails extends React.Component {
 
 const style = {
   margin: 15,
+};
+
+const imgstyle = {
+	height: 390,
+    display: 'block',
+    margin: 'auto',
+
 };
 
 export default withRouter(App);
