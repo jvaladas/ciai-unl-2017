@@ -63,7 +63,8 @@ class App extends Component {
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => ( <Register users={this.state.users}
-            addUser={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
+            updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
+          <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}/>)}/>
         </Switch>
 
         <Footer></Footer>
@@ -85,7 +86,11 @@ class Header extends Component {
         </span>
         <ul className="navigation-list" >
           <li>Option 1</li>
-          <li>{this.props.userName}</li>
+          <li>
+            <NavLink to="/account" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+              {this.props.userName}
+            </NavLink>
+          </li>
           <li>
             <NavLink to="/signup" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
               Sign up
@@ -130,7 +135,7 @@ class ListFilters extends React.Component {
     return (
       <div className="list-filters-container" >
         <h1>Browse By Category</h1>
-        <span className="category-item" >Paintings</span>
+        <span className="category-item">Paintings</span>
         <span className="category-item">Drawings</span>
         <span className="category-item">Something</span>
         <span className="category-item">Miscelaneous</span>
@@ -292,6 +297,46 @@ class Login extends React.Component {
 
   }
 
+}
+
+class Account extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      first_name:'',
+      last_name:'',
+      email:'',
+      password:''
+    }
+  }
+
+    render() {  
+      return (
+        
+        <MuiThemeProvider>
+          
+        <div>
+          <div className="fix-space"></div>
+            <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
+            <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
+            <div>Email: <span>{this.props.currentUser.Email}</span></div>
+            <ul>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+        <li>
+          <DashboardListItem></DashboardListItem>
+        </li>
+      </ul>
+            
+        </div>
+        </MuiThemeProvider>
+        
+      );
+  }
 }
 
 
