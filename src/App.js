@@ -24,25 +24,57 @@ class App extends Component {
             "Name":"Higher Motion",
             "Description":"Painting, 35.4 H x 23.6 W x 0.8 in",
             "ImageUrl":"https://i.pinimg.com/originals/26/2d/a4/262da433a20602c80382fea94a8c1c26.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Portrait",
             "Description":"Painting, 23.6 H x 19.7 W x 0.8 in",
             "ImageUrl":"http://www.goddessofegypt.com/wp-content/uploads/2017/06/Abstract-Painting.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Impeccability of white",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
             "ImageUrl": "https://twistedsifter.files.wordpress.com/2014/06/fine-art-finger-paintings-by-iris-scott-3.jpg?w=800&h=800",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
           },
           {
             "Name":"Afterglow",
-            "Description":"Painting, 24 H x 30 W x 1.5 in",
+            "Description":"Painting, 30 H x 24 W x 0.7 in",
             "ImageUrl": "https://images.fineartamerica.com/images-medium-large-5/blue-venice-dmitry-spiros.jpg",
-            "Category":"Painting"
+            "Category":"Painting",
+            "Autor":""
+          },
+          {
+            "Name":"Three Blue Vases",
+            "Description":"Painting, 24 H x 30 W x 1.5 in",
+            "ImageUrl": "https://images-na.ssl-images-amazon.com/images/I/91MzV6V79DL._SL1500_.jpg",
+            "Category":"Painting",
+            "Autor":""
+          },
+          {
+            "Name":"The One With Sprinkes",
+            "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
+            "ImageUrl": "http://poststudioarts.com/wp-content/uploads/2016/05/art-painting-vangoghrhonecom14.jpg",
+            "Category":"Painting",
+            "Autor":""
+          },
+          {
+            "Name":"Boating blues 2",
+            "Description":"Painting, 24 H x 30 W x 1.5 in",
+            "ImageUrl": "https://afremov.com/image.php?type=P&id=19255",
+            "Category":"Painting",
+            "Autor":""
+          },
+          {
+            "Name":"Woodland Creature III",
+            "Description":"Painting, 30 H x 24 W x 0.7 in",
+            "ImageUrl": "https://affordableartfair.com/media/cache/1/marketplace/17f82f742ffe127f42dca9de82fb58b1/fair/2/58d3eac4e5b4c.jpg",
+            "Category":"Painting",
+            "Autor":""
           }
         ],
         users: [
@@ -63,9 +95,15 @@ class App extends Component {
         
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
-          <Route path='/signup' render={(props) => ( <Register users={this.state.users}
+          <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
-          <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}/>)}/>
+<<<<<<< HEAD
+          <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
+            updateArt={(newArt) => this.setState({ users: this.state.articles.concat(newArt) })} />)}/>
+=======
+          <Route path='/account' render={(props) => (<Account currentUser={this.state.currentUser}/>)}/>
+          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
+>>>>>>> 0cb48150b9629fde559621ee0fb2808380851bf9
         </Switch>
 
         <Footer></Footer>
@@ -86,6 +124,11 @@ class Header extends Component {
           </NavLink>
         </span>
         <ul className="navigation-list" >
+          <li>
+            <NavLink to="/article" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+              Article Details
+            </NavLink>
+          </li>
           <li>Option 1</li>
           <li>
             <NavLink to="/account" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
@@ -105,13 +148,15 @@ class Header extends Component {
 }
 
 
-
-
-
 class Footer extends React.Component {
   render(){
     return (
-      <div>This is footer</div>
+      <div className="footer-wrapper">
+        <div className="container">
+          <p>Still got to think about something to write on this footer. Maybe later I'll know.</p>
+          <p>We're in 2018.</p>
+        </div>
+      </div>
     )
   }
 }
@@ -146,8 +191,11 @@ class Dashboard extends React.Component {
 		</div>
         <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
         <div className="container">
-          <ListFilters></ListFilters>
+          <ListFilters filterName="all"></ListFilters>
+          <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
+          <ListFilters filterName="price"></ListFilters>
+          <div className="fix-space"></div>
         </div>
       </div>
     )
@@ -155,16 +203,41 @@ class Dashboard extends React.Component {
 }
 
 class ListFilters extends React.Component {
+  
   render() {
-    return (
-      <div className="list-filters-container" >
-        <h1>Browse By Category</h1>
-        <span className="category-item">Paintings</span>
-        <span className="category-item">Drawings</span>
-        <span className="category-item">Something</span>
-        <span className="category-item">Miscelaneous</span>
+    var elem = null;
+
+    if(this.props.filterName === "price"){
+      elem = (
+        <div className="list-filters-container" >
+          <h1>Browse Art by Price</h1>
+          <span className="category-item">100€ </span>
+          <span className="category-item">500€</span>
+          <span className="category-item">1500€</span>
+          <span className="category-item">2500€</span>
+        </div>
+      );
+    }
+    else if(this.props.filterName === "category"){
+      elem = (
+        <div className="list-filters-container" >
+          <h1>Browse Art by Category</h1>
+          <span className="category-item">Paintings</span>
+          <span className="category-item">Drawings</span>
+          <span className="category-item">Photography</span>
+          <span className="category-item">Miscelaneous</span>
+        </div>
+      );
+    }
+    else {
+      elem = (
+        <div className="list-filters-container" >
+        <h1>Recent Artwork</h1>
       </div>
-    )
+      )
+    }
+
+    return elem;
   }
 }
 
@@ -190,15 +263,23 @@ const paperStyle = {
   display: 'inline-block',
 }
 class DashboardListItem extends React.Component {
-  
+  constructor(props){
+    super(props);
+    this.state = {shadow:1}
+  }
+
+  onMouseOver = () => this.setState({ shadow: 2 });
+  onMouseOut = () => this.setState({ shadow: 1 });
+
   render() {
     return (
         <MuiThemeProvider>
-          <Paper style={paperStyle} zDepth={1}>
-            <img class="article-image" src={this.props.imgUrl} alt="article-image"></img>
-            <div id="article-name">{this.props.name}</div>
-            <div id="article-description">{this.props.description}</div>
-          </Paper>
+            <Paper onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}
+              id="paper-container" style={paperStyle} zDepth={this.state.shadow}>
+              <img class="article-image" src={this.props.imgUrl} alt="article-image"></img>
+              <div id="article-name">{this.props.name}</div>
+              <div id="article-description">{this.props.description}</div>
+            </Paper>
         </MuiThemeProvider>
     )
   }
@@ -255,8 +336,6 @@ class Register extends React.Component {
   }
 
   handleClick(event){
-    //console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
-    //To be done:check for empty values before hitting submit
     var self = this;
     var newUser = { 
       "FirstName": this.state.first_name,
@@ -267,7 +346,6 @@ class Register extends React.Component {
     this.props.updateUsers(newUser);
     window.location.href = "/";
   }
-
 }
 
 class Login extends React.Component {
@@ -318,9 +396,7 @@ class Login extends React.Component {
       "email":self.state.email,
       "password":self.state.password
     }
-
   }
-
 }
 
 class Account extends React.Component{
@@ -330,13 +406,17 @@ class Account extends React.Component{
       first_name:'',
       last_name:'',
       email:'',
-      password:''
-    }
+      password:'',
+      artName:'',
+      artDescription:'',
+      imageUrl: '',
+      category:'',
+      autor:this.props.currentUser.Email}
+    
   }
 
     render() {  
       return (
-        
         <MuiThemeProvider>
           
         <div>
@@ -344,7 +424,30 @@ class Account extends React.Component{
             <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
             <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
             <div>Email: <span>{this.props.currentUser.Email}</span></div>
-            <ul>
+            <div>
+            <TextField
+             hintText="Enter article's name"
+             floatingLabelText="Article name"
+             onChange = {(event,newValue) => this.setState({artname:newValue})}
+             />
+           <br/>
+           <TextField
+             hintText="Enter the article's description"
+             floatingLabelText="Description"
+             onChange = {(event,newValue) => this.setState({artDescription:newValue})}
+             />
+           <br/>
+           <TextField
+             hintText="Enter Category"
+             type="category"
+             floatingLabelText="Category"
+             onChange = {(event,newValue) => this.setState({category:newValue})}
+             />
+           <br/>
+           
+           <br/>
+            </div>
+       <ul>
         <li>
           <DashboardListItem></DashboardListItem>
         </li>
@@ -353,16 +456,77 @@ class Account extends React.Component{
         </li>
         <li>
           <DashboardListItem></DashboardListItem>
+        </li>
+        <li>
+          <ImageUpload/>
         </li>
       </ul>
             
         </div>
         </MuiThemeProvider>
-        
       );
   }
 }
 
+
+class ImageUpload extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {file: '',imagePreviewUrl: ''};
+  }
+
+  _handleSubmit(e) {
+    e.preventDefault();
+    // TODO: do something with -> this.state.file
+    console.log('handle uploading-', this.state.file);
+  }
+
+  _handleImageChange(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  render() {
+    let {imagePreviewUrl} = this.state;
+    let $imagePreview = null;
+    if (imagePreviewUrl) {
+      $imagePreview = (<img src={imagePreviewUrl} />);
+    } else {
+      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+    }
+
+    return (
+      <div className="previewComponent">
+        <form onSubmit={(e)=>this._handleSubmit(e)}>
+          <input className="fileInput" 
+            type="file" 
+            onChange={(e)=>this._handleImageChange(e)} />
+          <button className="submitButton" 
+            type="submit" 
+            onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>
+        </form>
+        <div className="imgPreview">
+          {$imagePreview}
+        </div>
+      </div>
+    )
+  }
+}
+
+class ArticleDetails extends React.Component {
+
+}
 
 
 const style = {
