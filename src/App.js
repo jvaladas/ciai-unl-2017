@@ -3,6 +3,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
 import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+import FlatButton from 'material-ui/FlatButton';
 
 class App extends Component {
   
@@ -17,19 +20,28 @@ class App extends Component {
         },
         articles: [
           {
-            "Name":"Painting 1",
-            "Description":"This was something I imagined.",
-            "ImageUrl":""
+            "Name":"Higher Motion",
+            "Description":"Painting, 35.4 H x 23.6 W x 0.8 in",
+            "ImageUrl":"https://i.pinimg.com/originals/26/2d/a4/262da433a20602c80382fea94a8c1c26.jpg",
+            "Category":"Painting"
           },
           {
-            "Name":"MMMMGGNNGNNGNN",
-            "Description":"anfsiuasnbkjulodaso",
-            "ImageUrl":""
+            "Name":"Portrait",
+            "Description":"Painting, 23.6 H x 19.7 W x 0.8 in",
+            "ImageUrl":"http://www.goddessofegypt.com/wp-content/uploads/2017/06/Abstract-Painting.jpg",
+            "Category":"Painting"
           },
           {
-            "Name":"aaavavavavvava",
-            "Description":"aiubcmkbcvm,cbvm,bmc,vm",
-            "ImageUrl": ""
+            "Name":"Impeccability of white",
+            "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
+            "ImageUrl": "https://twistedsifter.files.wordpress.com/2014/06/fine-art-finger-paintings-by-iris-scott-3.jpg?w=800&h=800",
+            "Category":"Painting"
+          },
+          {
+            "Name":"Afterglow",
+            "Description":"Painting, 24 H x 30 W x 1.5 in",
+            "ImageUrl": "https://images.fineartamerica.com/images-medium-large-5/blue-venice-dmitry-spiros.jpg",
+            "Category":"Painting"
           }
         ],
         users: [
@@ -51,7 +63,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => ( <Register users={this.state.users}
-            updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
+            addUser={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
         </Switch>
 
         <Footer></Footer>
@@ -85,6 +97,10 @@ class Header extends Component {
     )
   }
 }
+
+
+
+
 
 class Footer extends React.Component {
   render(){
@@ -126,25 +142,35 @@ class ListFilters extends React.Component {
 class DashboardList extends React.Component {
   render() {
     return (
-      <ul>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
+      <ul id="article-list">
+        {this.props.articles.map( (article,index) => 
+          <li>
+            <DashboardListItem key={index} name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+          </li>)
+        }
       </ul>
     )
   }
 }
 
+
+const paperStyle = {
+  height: 260,
+  width: 260,
+  margin: 6,
+  display: 'inline-block',
+}
 class DashboardListItem extends React.Component {
+  
   render() {
     return (
-      <div>This is dashboard list item </div>
+        <MuiThemeProvider>
+          <Paper style={paperStyle} zDepth={1}>
+            <img class="article-image" src={this.props.imgUrl} alt="article-image"></img>
+            <div id="article-name">{this.props.name}</div>
+            <div id="article-description">{this.props.description}</div>
+          </Paper>
+        </MuiThemeProvider>
     )
   }
 }
@@ -263,9 +289,7 @@ class Login extends React.Component {
       "email":self.state.email,
       "password":self.state.password
     }
-    
-    self.props.updateUsers(newUser);
-    window.location.href = "/";
+
   }
 
 }
