@@ -87,9 +87,10 @@ class App extends Component {
         
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
-          <Route path='/signup' render={(props) => ( <Register users={this.state.users}
+          <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
-          <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}/>)}/>
+          <Route path='/account' render={(props) => (<Account currentUser={this.state.currentUser}/>)}/>
+          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
         </Switch>
 
         <Footer></Footer>
@@ -110,6 +111,11 @@ class Header extends Component {
           </NavLink>
         </span>
         <ul className="navigation-list" >
+          <li>
+            <NavLink to="/article" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
+              Article Details
+            </NavLink>
+          </li>
           <li>Option 1</li>
           <li>
             <NavLink to="/account" activeClassName="active-link" style={{color:'black', textDecoration:'none'}}>
@@ -132,7 +138,12 @@ class Header extends Component {
 class Footer extends React.Component {
   render(){
     return (
-      <div>This is footer</div>
+      <div className="footer-wrapper">
+        <div className="container">
+          <p>Still got to think about something to write on this footer. Maybe later I'll know.</p>
+          <p>We're in 2018.</p>
+        </div>
+      </div>
     )
   }
 }
@@ -148,6 +159,7 @@ class Dashboard extends React.Component {
           <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
           <ListFilters filterName="price"></ListFilters>
+          <div className="fix-space"></div>
         </div>
       </div>
     )
@@ -159,7 +171,7 @@ class ListFilters extends React.Component {
   render() {
     var elem = null;
 
-    if(this.props.filterName == "price"){
+    if(this.props.filterName === "price"){
       elem = (
         <div className="list-filters-container" >
           <h1>Browse Art by Price</h1>
@@ -170,7 +182,7 @@ class ListFilters extends React.Component {
         </div>
       );
     }
-    else if(this.props.filterName == "category"){
+    else if(this.props.filterName === "category"){
       elem = (
         <div className="list-filters-container" >
           <h1>Browse Art by Category</h1>
@@ -446,6 +458,10 @@ class ImageUpload extends React.Component {
       </div>
     )
   }
+}
+
+class ArticleDetails extends React.Component {
+
 }
 
 
