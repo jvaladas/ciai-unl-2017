@@ -18,15 +18,18 @@ class App extends Component {
         articles: [
           {
             "Name":"Painting 1",
-            "Description":"This was something I imagined."
+            "Description":"This was something I imagined.",
+            "ImageUrl":""
           },
           {
             "Name":"MMMMGGNNGNNGNN",
-            "Description":"anfsiuasnbkjulodaso"
+            "Description":"anfsiuasnbkjulodaso",
+            "ImageUrl":""
           },
           {
             "Name":"aaavavavavvava",
-            "Description":"aiubcmkbcvm,cbvm,bmc,vm"
+            "Description":"aiubcmkbcvm,cbvm,bmc,vm",
+            "ImageUrl": ""
           }
         ],
         users: [
@@ -46,7 +49,7 @@ class App extends Component {
         <Header userName={this.state.currentUser.FirstName}></Header>
         
         <Switch>
-          <Route exact path='/' component={Dashboard}/>
+          <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => ( <Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
         </Switch>
@@ -95,11 +98,12 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <img id="dashboard-image" src="https://www.stationgallery.ca/wp-content/uploads/2017/05/Coppa-Gallery-2.jpg"></img>
+        <img id="dashboard-image" src={require('./assets/018.jpg')} alt="background-image"></img>
         <div id="dashboard-text">Your very own <span className="underline-word">art gallery</span>.</div>
-        <ListFilters></ListFilters>
-        <DashboardList></DashboardList>
-
+        <div className="container">
+          <ListFilters></ListFilters>
+          <DashboardList articles={this.props.articles}></DashboardList>
+        </div>
       </div>
     )
   }
@@ -109,30 +113,11 @@ class ListFilters extends React.Component {
   render() {
     return (
       <div className="list-filters-container" >
-        <span className="filter-item">
-            <label>Name</label>
-            <select className="browser-default">
-              <option>123</option>
-              <option>345</option>
-              <option>456</option>
-            </select>
-        </span>
-        <span className="filter-item">
-          <label>Description</label>
-            <select className="browser-default">
-              <option>123</option>
-              <option>345</option>
-              <option>456</option>
-            </select>
-        </span>
-        <span className="filter-item">
-          <label>Category</label>
-            <select className="browser-default">
-              <option>123</option>
-              <option>345</option>
-              <option>456</option>
-            </select>
-        </span>
+        <h1>Browse By Category</h1>
+        <span className="category-item" >Paintings</span>
+        <span className="category-item">Drawings</span>
+        <span className="category-item">Something</span>
+        <span className="category-item">Miscelaneous</span>
       </div>
     )
   }
@@ -246,7 +231,7 @@ class Login extends React.Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <div class="fix-space"></div>
+            <div className="fix-space"></div>
            <TextField
              hintText="Enter your Email"
              type="email"
