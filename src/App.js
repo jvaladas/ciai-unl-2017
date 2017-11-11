@@ -93,12 +93,14 @@ class App extends Component {
       <div>
         <Header userName={this.state.currentUser.FirstName}></Header>
         <div className="fix-space"></div>
+
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
             updateArt={(newArt) => this.setState({ users: this.state.articles.concat(newArt) })} />)}/>
+          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
         </Switch>
 
         <Footer></Footer>
@@ -107,9 +109,7 @@ class App extends Component {
   }
 }
 
-
 class Header extends Component {
-
   render() {
     return (
       <div className="navigation-bar">
@@ -147,8 +147,7 @@ class Footer extends React.Component {
     return (
       <div className="footer-wrapper">
         <div className="container">
-          <p>Still got to think about something to write on this footer. Maybe later I'll know.</p>
-          <p>We're in 2018.</p>
+          <p>Still got to think about something to write on this footer. Maybe later I'll know. It's 2017</p>
         </div>
       </div>
     )
@@ -189,7 +188,7 @@ class Dashboard extends React.Component {
 		</div>
         <div id="dashboard-text">
           <div className="text-item" >Your very own art gallery, </div>
-          <div className="text-item" >wherever you are.</div>
+          <div id="bottom-text" className="text-item" >wherever you are.</div>
         </div>
         <div className="container">
           <ListFilters filterName="all"></ListFilters>
@@ -251,8 +250,8 @@ class DashboardList extends React.Component {
     return (
       <ul id="article-list">
         {this.props.articles.map( (article,index) => 
-          <li>
-            <DashboardListItem key={index} name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+          <li key={index}>
+            <DashboardListItem name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
           </li>)
         }
       </ul>
@@ -303,7 +302,7 @@ class Register extends React.Component {
   
   render() {
     return (
-      <div className="register-form">
+      <div className="container register-form">
         <MuiThemeProvider>
           <div>
            <TextField
@@ -417,12 +416,10 @@ class Account extends React.Component{
       autor:this.props.currentUser.Email}
     
   }
-
     render() {  
       return (
         <MuiThemeProvider>
-          
-        <div>
+        <div className="container">
             <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
             <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
             <div>Email: <span>{this.props.currentUser.Email}</span></div>
@@ -541,7 +538,23 @@ class ArticleDetails extends React.Component {
         <div className="container">
           <div className="content-wrapper">
             <h1>Article Details #{this.props.id}</h1>
+            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
+            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
+            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
           </div>
+          <div className="content-wrapper">
+            <h1>Content Media</h1>
+            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
+            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
+            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
+          </div>
+          <div className="content-wrapper">
+            <h1>Comments and Reviews</h1>
+            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
+            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
+            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
+            
+          </div> 
         </div>
       </div>
     )
