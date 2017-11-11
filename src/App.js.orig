@@ -105,8 +105,12 @@ class App extends Component {
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
-            updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })} />)}/>
+<<<<<<< Updated upstream
+            updateArt={(newArt) => this.setState({ users: this.state.articles.concat(newArt) })} />)}/>
           <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
+=======
+            updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })} />)}/>
+>>>>>>> Stashed changes
         </Switch>
 
         <Footer></Footer>
@@ -422,8 +426,11 @@ class Account extends React.Component{
       autor:this.props.currentUser.Email}
     
   }
+<<<<<<< Updated upstream
+=======
   
 
+>>>>>>> Stashed changes
     render() {  
       let {imageUrl} = this.state;
       let $imagePreview = null;
