@@ -308,7 +308,12 @@ class Register extends React.Component {
   
   render() {
     return (
-      <div className="container register-form">
+      <div className="register-form">
+        <div className="container">
+          <div className="breadcrumbs">
+            <span>Home </span>/
+            <span> Register</span>
+          </div>
         <MuiThemeProvider>
           <div>
            <TextField
@@ -340,6 +345,7 @@ class Register extends React.Component {
            <RaisedButton label="Register" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
           </div>
          </MuiThemeProvider>
+         </div>
       </div>
     );
   }
@@ -435,61 +441,67 @@ class Account extends React.Component{
 
 
       return (
-        <MuiThemeProvider>
-        <div className="container">
-            <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
-            <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
-            <div>Email: <span>{this.props.currentUser.Email}</span></div>
-            <div>
-            <TextField
-             hintText="Enter article's name"
-             floatingLabelText="Article name"
-             onChange = {(event,newValue) => this.setState({artName:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter the article's description"
-             floatingLabelText="Description"
-             onChange = {(event,newValue) => this.setState({artDescription:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter Category"
-             type="category"
-             floatingLabelText="Category"
-             onChange = {(event,newValue) => this.setState({category:newValue})}
-             />
-           <br/>
-           
-           <br/>
+        <div className="">
+          <MuiThemeProvider>
+          <div className="container">
+            <div className="breadcrumbs">
+              <span>Home</span>/
+              <span>Account</span>
             </div>
-            <div>
-              <div className="previewComponent">
-              <form onSubmit={(event)=>this._handleSubmit(event)}>
-               <input className="fileInput" 
-                type="file" 
-                onChange={(event)=>this._handleImageChange(event)} />
-                <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-          </form>
-        {/*<div className="imgPreview">
-          {$imagePreview}
-        </div>*/}
-      </div>
-              </div>
-       <ul>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
-        <li>
-          <DashboardListItem></DashboardListItem>
-        </li>
-      </ul>
+              <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
+              <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
+              <div>Email: <span>{this.props.currentUser.Email}</span></div>
+              <div>
+              <TextField
+              hintText="Enter article's name"
+              floatingLabelText="Article name"
+              onChange = {(event,newValue) => this.setState({artName:newValue})}
+              />
+            <br/>
+            <TextField
+              hintText="Enter the article's description"
+              floatingLabelText="Description"
+              onChange = {(event,newValue) => this.setState({artDescription:newValue})}
+              />
+            <br/>
+            <TextField
+              hintText="Enter Category"
+              type="category"
+              floatingLabelText="Category"
+              onChange = {(event,newValue) => this.setState({category:newValue})}
+              />
+            <br/>
             
+            <br/>
+              </div>
+              <div>
+                <div className="previewComponent">
+                <form onSubmit={(event)=>this._handleSubmit(event)}>
+                <input className="fileInput" 
+                  type="file" 
+                  onChange={(event)=>this._handleImageChange(event)} />
+                  <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+            </form>
+          {/*<div className="imgPreview">
+            {$imagePreview}
+          </div>*/}
         </div>
-        </MuiThemeProvider>
+                </div>
+        <ul>
+          <li>
+            <DashboardListItem></DashboardListItem>
+          </li>
+          <li>
+            <DashboardListItem></DashboardListItem>
+          </li>
+          <li>
+            <DashboardListItem></DashboardListItem>
+          </li>
+        </ul>
+              
+          </div>
+          </MuiThemeProvider>
+        </div>
       );
   }
 
@@ -604,14 +616,20 @@ class ArticleDetails extends React.Component {
     return (
       <div id="article-wrapper">
         <div className="container">
+          <div className="breadcrumbs">
+            <span>Shop </span>/ 
+            <span> Category </span>/ 
+            <span> Item </span>
+          </div>
+
+          <div id="article-title">Self Portrait <span>by author name.</span></div>
           <div className="content-wrapper">
-            <h1>Article Details #{this.props.id}</h1>
+
             <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
-            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
-            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
+
           </div>
           <div className="content-wrapper">
-            <h1>Content Media</h1>
+            <h1>Description</h1>
             <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
             <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
             <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>

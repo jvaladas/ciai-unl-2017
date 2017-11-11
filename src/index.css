@@ -166,8 +166,29 @@ h1{
   padding: 2px 0px 2px 11px;
   border-left: 3px solid #5c6bc0;
   width: fit-content;
-  font-size:22px;
+  font-size:20px;
+  color:#1a1a1a;
 }
 .content-wrapper p {
   margin: 0 0 2px;
+}
+.register-form {
+  background:#f7f7f7;
+}
+.breadcrumbs {
+  text-transform: uppercase;
+  color:#1a1a1a;
+  font-size:12px;
+  font-weight:500;
+  cursor:pointer;
+  padding-top:16px;
+  padding-bottom:16px;
+}
+.breadcrumbs span:hover {
+  font-weight:600;
+}
+#article-title {
+  font-size:22px;
+  color:#5c6bc0;
+  font-weight:600;
 }
