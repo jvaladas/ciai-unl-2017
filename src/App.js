@@ -444,7 +444,7 @@ class Account extends React.Component{
             <TextField
              hintText="Enter article's name"
              floatingLabelText="Article name"
-             onChange = {(event,newValue) => this.setState({artname:newValue})}
+             onChange = {(event,newValue) => this.setState({artName:newValue})}
              />
            <br/>
            <TextField
@@ -469,11 +469,11 @@ class Account extends React.Component{
                <input className="fileInput" 
                 type="file" 
                 onChange={(event)=>this._handleImageChange(event)} />
-                <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+                <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
           </form>
-        <div className="imgPreview">
+        {/*<div className="imgPreview">
           {$imagePreview}
-        </div>
+        </div>*/}
       </div>
               </div>
        <ul>
@@ -507,9 +507,12 @@ class Account extends React.Component{
       "Autor":this.state.autor
     }
 
-    this.props.updateArt(newArticle);
-
-   //console.log('newArticle',newArticle);
+    
+    if(newArticle.ImageUrl!=""){
+      this.props.updateArt(newArticle);
+      //window.location.href = "/account";
+    }
+   console.log('newArticle',newArticle);
    
   }
 
