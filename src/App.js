@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
-import {NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
+import {BrowserRouter,NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import './App.css';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
 
 class App extends Component {
   
@@ -500,6 +501,8 @@ class Account extends React.Component{
     event.preventDefault();
     console.log('handle uploading-', this.state.file);
 
+  
+
     var newArticle = { 
       "Name":this.state.artName,
       "Description":this.state.artDescription,
@@ -511,6 +514,7 @@ class Account extends React.Component{
     
     if(newArticle.ImageUrl!=""){
       this.props.updateArt(newArticle);
+     
     }
    console.log('newArticle',newArticle);
    
