@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar, RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
-import {NavLink, Switch, Route, withRouter} from 'react-router-dom';
+import {NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
@@ -432,9 +432,10 @@ class Account extends React.Component{
       } else {
         $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
       }
-
+      console.log(this.state);
 
       return (
+
         <MuiThemeProvider>
         <div className="container">
             <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
@@ -510,7 +511,6 @@ class Account extends React.Component{
     
     if(newArticle.ImageUrl!=""){
       this.props.updateArt(newArticle);
-      //window.location.href = "/account";
     }
    console.log('newArticle',newArticle);
    
