@@ -440,7 +440,7 @@ class Register extends React.Component {
     }
     this.props.updateUsers(newUser);
     this.props.loginUser(newUser);
-    this.state.setState({fireRedirect : true});
+    this.setState({fireRedirect : true});
   }
 
   handleLogin(event){
