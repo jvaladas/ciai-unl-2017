@@ -137,7 +137,7 @@ class Header extends Component {
         <div className="navigation-bar">
           <span id="store-name">
             <NavLink to="/" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-              Store Name
+              ArtistLife
             </NavLink>
           </span>
           <ul className="navigation-list" >
@@ -238,7 +238,6 @@ class Dashboard extends React.Component {
           <div id="bottom-text" className="text-item" >wherever you are.</div>
         </div>
         <div className="container">
-          <ListFilters filterName="all"></ListFilters>
           <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
           <ListFilters filterName="price"></ListFilters>
