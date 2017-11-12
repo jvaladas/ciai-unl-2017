@@ -1,0 +1,12 @@
+//webratio.com
+
+1. O utilizador regista-se como Artista ou X.
+2. O utilizador adiciona uma peça de arte à sua galeria com o seu nome, pelo menos um conteúdo multimédia, uma ficha técnica (data de criação da peça de arte, tecnicas implementadas e um texto descritivo), e um conjunto de keywords que descrevem a peça.
+   O utilizador indica se a peça está disponível para venda, podendo dar um valor ou deixar como QYOP.
+3. O utilizador pesquisa por peças com uma determinada característica (palavra, data, descrição).
+4. O utilizador submete uma oferta para a compra da peça de arte enviando uma notificação para o detentor da peça. 
+5. O utilizador detentor de uma peça, após receber a notificação de oferta, decide se aceita ou não e notifica o utilizador interessado.
+6. Caso o utlizador detentor da peça aceite a oferta do comprador, este autoriza (ou não) a publicação do seu nome como detentor actual da peça de arte.
+7. O utilizador clica numa keyword da peça actual para ver a galeria de N peças de arte mais recentes relacionadas com essa mesma keyword.
+8. O utilizador apaga uma peça da sua galeria.
+9. O utilizador 
