@@ -114,7 +114,9 @@ class App extends Component {
             loginUser={(user) => this.setState({currentUser: user})}/> )}/>
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
             updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })}
-            collection={this.state.articles.filter(x => x.Autor === this.state.currentUser.Email)} />)}/>
+            collection={this.state.articles.filter(x => x.Autor === this.state.currentUser.Email)} 
+            articlesLength={this.state.articles.length} 
+          />)}/>
           <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} articles={this.state.articles} />)}/>
           <Route path='/messages' render={(props) => <MessagesList />}/>
         </Switch>
@@ -466,7 +468,8 @@ class Account extends React.Component{
       category:'',
       autor:this.props.currentUser.Email,
       artCollection:this.props.collection,
-      currentId:-1
+      currentId:-1,
+      externalUrl:''
     }
   }
 
@@ -478,7 +481,6 @@ class Account extends React.Component{
       } else {
         $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
       }
-      console.log(this.state);
 
       return (
         <div className="account-wrapper">
@@ -530,8 +532,12 @@ class Account extends React.Component{
               floatingLabelText="Category"
               onChange = {(event,newValue) => this.setState({category:newValue})}
               />
-            <br/>
-            
+          <TextField
+            hintText="Enter External URL (optional)"
+            type="text"
+            floatingLabelText="External URL"
+            onChange = {(event,newValue) => this.setState({externalUrl:newValue})}
+          /> 
             <br/>
               </div>
               <div>
@@ -544,7 +550,7 @@ class Account extends React.Component{
             </form>
           {/*<div className="imgPreview">
             {$imagePreview}
-          </div>*/}
+            </div>*/}
         </div>
                 </div>
               
@@ -555,27 +561,25 @@ class Account extends React.Component{
   }
 
   handleClick(event){
-    console.log("State",this.state);
     //To be done:check for empty values before hitting submit
     event.preventDefault();
-    console.log('handle uploading-', this.state.file);
 
     var newArticle = { 
+      "id":this.props.articlesLength+1,
       "Name":this.state.artName,
       "Description":this.state.artDescription,
-      "ImageUrl": this.state.imageUrl,
       "Category": this.state.category,
       "Autor":this.state.autor
     }
 
-    
-    if(newArticle.ImageUrl!=""){
+    if(this.state.externalUrl !== '')
+      newArticle.ImageUrl = this.state.externalUrl;
+    else 
+      newArticle.ImageUrl = this.state.imageUrl;
+
       this.props.updateArt(newArticle);
-     
+      this.setState({artCollection:this.state.artCollection.concat(newArticle)});
     }
-   console.log('newArticle',newArticle);
-   
-  }
 
   _handleImageChange(event) {
     event.preventDefault();
