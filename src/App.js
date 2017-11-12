@@ -14,14 +14,10 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state={
-        currentUser: {
-          "FirstName":"Andre",
-          "LastName":"Maria",
-          "Email": "andre@aol.com.br",
-          "Password": "123"
-        },
+        currentUser: null,
         articles: [
           {
+            "id":1,
             "Name":"Higher Motion",
             "Description":"Painting, 35.4 H x 23.6 W x 0.8 in",
             "ImageUrl":"https://i.pinimg.com/originals/26/2d/a4/262da433a20602c80382fea94a8c1c26.jpg",
@@ -29,6 +25,7 @@ class App extends Component {
             "Autor":"andre@aol.com.br"
           },
           {
+            "id":2,
             "Name":"Portrait",
             "Description":"Painting, 23.6 H x 19.7 W x 0.8 in",
             "ImageUrl":"http://www.goddessofegypt.com/wp-content/uploads/2017/06/Abstract-Painting.jpg",
@@ -36,6 +33,7 @@ class App extends Component {
             "Autor":"andre@aol.com.br"
           },
           {
+            "id":3,
             "Name":"Impeccability of white",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
             "ImageUrl": "https://twistedsifter.files.wordpress.com/2014/06/fine-art-finger-paintings-by-iris-scott-3.jpg?w=800&h=800",
@@ -43,6 +41,7 @@ class App extends Component {
             "Autor":"j@aol.com"
           },
           {
+            "id":4,
             "Name":"Afterglow",
             "Description":"Painting, 30 H x 24 W x 0.7 in",
             "ImageUrl": "https://images.fineartamerica.com/images-medium-large-5/blue-venice-dmitry-spiros.jpg",
@@ -50,6 +49,7 @@ class App extends Component {
             "Autor":"j@aol.com"
           },
           {
+            "id":5,
             "Name":"Three Blue Vases",
             "Description":"Painting, 24 H x 30 W x 1.5 in",
             "ImageUrl": "https://images-na.ssl-images-amazon.com/images/I/91MzV6V79DL._SL1500_.jpg",
@@ -57,6 +57,7 @@ class App extends Component {
             "Autor":"j@aol.com"
           },
           {
+            "id":6,
             "Name":"The One With Sprinkes",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
             "ImageUrl": "http://poststudioarts.com/wp-content/uploads/2016/05/art-painting-vangoghrhonecom14.jpg",
@@ -64,6 +65,7 @@ class App extends Component {
             "Autor":"j@aol.com"
           },
           {
+            "id":7,
             "Name":"Boating blues 2",
             "Description":"Painting, 24 H x 30 W x 1.5 in",
             "ImageUrl": "https://afremov.com/image.php?type=P&id=19255",
@@ -71,6 +73,7 @@ class App extends Component {
             "Autor":"andre@aol.com.br"
           },
           {
+            "id":8,
             "Name":"Woodland Creature III",
             "Description":"Painting, 30 H x 24 W x 0.7 in",
             "ImageUrl": "https://affordableartfair.com/media/cache/1/marketplace/17f82f742ffe127f42dca9de82fb58b1/fair/2/58d3eac4e5b4c.jpg",
@@ -80,12 +83,14 @@ class App extends Component {
         ],
         users: [
           {
+            "id":1,
             "FirstName":"Andre",
             "LastName":"Maria",
             "Email": "andre@aol.com.br",
             "Password": "123"
           },
           {
+            "id":2,
             "FirstName":"Joao",
             "LastName":"Carlos",
             "Email": "j@aol.com",
@@ -98,28 +103,54 @@ class App extends Component {
   render(){
     return (
       <div>
-        <Header userName={this.state.currentUser.FirstName}></Header>
+        <Header logoutUser = {() => this.setState({currentUser : null})}
+          currentUser={this.state.currentUser}></Header>
         <div className="fix-space"></div>
 
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
-            updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}/> )}/>
+            updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}
+            loginUser={(user) => this.setState({currentUser: user})}/> )}/>
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
-            updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })} />)}/>
-          <Route path='/article' render={(props) => (<ArticleDetails id="1" />)}/>
+            updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })}
+            collection={this.state.articles.filter(x => x.Autor === this.state.currentUser.Email)} />)}/>
+          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} articles={this.state.articles} />)}/>
+          <Route path='/messages' render={(props) => <MessagesList />}/>
         </Switch>
 
         <Footer></Footer>
       </div>
     );
   }
+
 }
 
 class Header extends Component {
   render() {
-    return (
-      <div className="navigation-bar">
+    var el = null;
+
+    if(this.props.currentUser === null){
+      el = (  
+        <div className="navigation-bar">
+          <span id="store-name">
+            <NavLink to="/" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
+              Store Name
+            </NavLink>
+          </span>
+          <ul className="navigation-list" >
+            <li>
+              <NavLink to="/signup" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
+                Sign up
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    else {
+      el = (
+        <div className="navigation-bar">
         <span id="store-name">
           <NavLink to="/" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
             Store Name
@@ -127,25 +158,32 @@ class Header extends Component {
         </span>
         <ul className="navigation-list" >
           <li>
-            <NavLink to="/article" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-              Article Details
+            <NavLink to="/messages" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
+              Notifications
             </NavLink>
           </li>
-          <li>Option 1</li>
           <li>
             <NavLink to="/account" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-              {this.props.userName}
+              {this.props.currentUser.FirstName}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/signup" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-              Sign up
+            <NavLink to="/" onClick={this.handleLogout} activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
+              Sign out
             </NavLink>
           </li>
         </ul>
       </div>
-    )
+      );
+    }
+
+    return el;
   }
+
+  handleLogout(){
+    this.props.logoutUser();
+  }
+
 }
 
 
@@ -154,7 +192,7 @@ class Footer extends React.Component {
     return (
       <div className="footer-wrapper">
         <div className="container">
-          <p>Still got to think about something to write on this footer. Maybe later I'll know. It's 2017</p>
+          <p>This project is part of the course on Web Applications Development at FCT UNL - Fall 2017.</p>
         </div>
       </div>
     )
@@ -217,7 +255,6 @@ class ListFilters extends React.Component {
   
   render() {
     var elem = null;
-
     if(this.props.filterName === "price"){
       elem = (
         <div className="list-filters-container" >
@@ -253,19 +290,33 @@ class ListFilters extends React.Component {
 }
 
 class DashboardList extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      currentId:-1
+    }
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   render() {
     return (
       <ul id="article-list">
         {this.props.articles.map( (article,index) => 
-          <li key={index}>
+          <li key={index} onClick={() => this.handleClick(article.id)}>
             <DashboardListItem name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+            {this.state.currentId === article.id && (
+              <Redirect to={'/article/'+article.id}/>
+            )}
           </li>)
         }
       </ul>
     )
   }
-}
 
+  handleClick(index){
+    this.setState({currentId:index});
+  }
+}
 
 const paperStyle = {
   height: 260,
@@ -303,31 +354,37 @@ class Register extends React.Component {
       first_name:'',
       last_name:'',
       email:'',
-      password:''
+      password:'',
+      login_email:'',
+      login_password:'',
+      fireRedirect:false
     }
   }
   
   render() {
+    
     return (
-      <div className="register-form">
+      <div className="register-wrapper">
+        
         <div className="container">
           <div className="breadcrumbs">
             <span>Home </span>/
             <span> Register</span>
           </div>
         <MuiThemeProvider>
-          <div>
-           <TextField
-             hintText="Enter your First Name"
-             floatingLabelText="First Name"
-             onChange = {(event,newValue) => this.setState({first_name:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter your Last Name"
-             floatingLabelText="Last Name"
-             onChange = {(event,newValue) => this.setState({last_name:newValue})}
-             />
+          <div className="register-form" >
+            <h4>Register</h4>
+            <TextField
+              hintText="Enter your First Name"
+              floatingLabelText="First Name"
+              onChange = {(event,newValue) => this.setState({first_name:newValue})}
+            />
+            <br/>
+            <TextField
+              hintText="Enter your Last Name"
+              floatingLabelText="Last Name"
+              onChange = {(event,newValue) => this.setState({last_name:newValue})}
+            />
            <br/>
            <TextField
              hintText="Enter your Email"
@@ -343,15 +400,35 @@ class Register extends React.Component {
              onChange = {(event,newValue) => this.setState({password:newValue})}
              />
            <br/>
-           <RaisedButton label="Register" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+           <RaisedButton label="Register" primary={true} style={style} onClick={(event) => this.handleRegister(event)}/>
           </div>
+          <div className="login-form">
+            <h4>Login</h4>
+            <TextField
+              hintText="Enter your email"
+              floatingLabelText="Email"
+              onChange = {(event,newValue) => this.setState({login_email:newValue})}
+            />
+            <br/>
+            <TextField
+              hintText="Enter your account password"
+              floatingLabelText="Password"
+              onChange = {(event,newValue) => this.setState({login_password:newValue})}
+            />
+            <br/>
+            <RaisedButton label="Login" primary={true} style={style} onClick={(event) => this.handleLogin(event)}/>
+          </div>
+          {this.state.fireRedirect && (
+            <Redirect to={'/'}/>
+          )}
          </MuiThemeProvider>
          </div>
+         <div className="fix-space"></div>
       </div>
     );
   }
 
-  handleClick(event){
+  handleRegister(event){
     var self = this;
     var newUser = { 
       "FirstName": this.state.first_name,
@@ -360,57 +437,18 @@ class Register extends React.Component {
       "Password":this.state.password
     }
     this.props.updateUsers(newUser);
-    window.location.href = "/";
-  }
-}
-
-class Login extends React.Component {
-  constructor(props){
-    super(props);
-    this.state={
-      first_name:'',
-      last_name:'',
-      email:'',
-      password:''
-    }
-  }
-  
-  render() {
-    return (
-      <div>
-        <MuiThemeProvider>
-          <div>
-           <TextField
-             hintText="Enter your Email"
-             type="email"
-             floatingLabelText="Email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
-             />
-           <br/>
-           <TextField
-             type = "password"
-             hintText="Enter your Password"
-             floatingLabelText="Password"
-             onChange = {(event,newValue) => this.setState({password:newValue})}
-             />
-           <br/>
-           <RaisedButton label="Login" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-          </div>
-         </MuiThemeProvider>
-      </div>
-    );
+    this.props.loginUser(newUser);
+    this.state.setState({fireRedirect : true});
   }
 
-  handleClick(event){
-    console.log("values",this.state.email,this.state.password);
-    //To be done:check for empty values before hitting submit
+  handleLogin(event){
     var self = this;
-    var newUser = { 
-      "first_name": self.state.first_name,
-      "last_name":self.state.last_name,
-      "email":self.state.email,
-      "password":self.state.password
+    var parameters = {
+      "Email":this.state.login_email,
+      "Password":this.state.login_password
     }
+    this.props.loginUser(this.props.users.find(e => e.Email == parameters.Email && e.Password == parameters.Password));
+    this.setState({fireRedirect : true});
   }
 }
 
@@ -426,10 +464,11 @@ class Account extends React.Component{
       artDescription:'',
       imageUrl: '',
       category:'',
-      autor:this.props.currentUser.Email}
-    
+      autor:this.props.currentUser.Email,
+      artCollection:this.props.collection,
+      currentId:-1
+    }
   }
-  
 
     render() {  
       let {imageUrl} = this.state;
@@ -442,52 +481,50 @@ class Account extends React.Component{
       console.log(this.state);
 
       return (
-
+        <div className="account-wrapper">
         <MuiThemeProvider>
         <div className="container">
-            <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
-            <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
-            <div>Email: <span>{this.props.currentUser.Email}</span></div>
-            <div>
+          <div className="breadcrumbs">
+              <span>Home </span>/
+              <span> My Account</span>
+          </div>
+          <div className="article-title">My Account</div>
+
+          <div className="content-wrapper">
+            <h1>Basic Information</h1>
+              <div><span className="details-item">First Name:</span> {this.props.currentUser.FirstName}</div>
+              <div><span className="details-item">Last Name:</span> {this.props.currentUser.LastName}</div>
+              <div><span className="details-item">Email:</span> {this.props.currentUser.Email}</div>
+          </div>
+          <div className="content-wrapper">
+            <h1>My Collection</h1>
+            <ul id="article-list">
+              {this.state.artCollection.map( (article,index) => 
+                <li key={index} onClick={() => this.handleNavigation(article.id)}>
+                  <DashboardListItem name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+                  {this.state.currentId === article.id && (
+                    <Redirect to={'/article/'+article.id}/>
+                  )}
+                </li>)
+              }
+            </ul>
+          </div>
+
+          <h4>Add a new item</h4>
+          <div>
             <TextField
-             hintText="Enter article's name"
-             floatingLabelText="Article name"
-             onChange = {(event,newValue) => this.setState({artName:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter the article's description"
-             floatingLabelText="Description"
-             onChange = {(event,newValue) => this.setState({artDescription:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter Category"
-             type="category"
-             floatingLabelText="Category"
-             onChange = {(event,newValue) => this.setState({category:newValue})}
-             />
-           <br/>
-           
-           <br/>
-            </div>
-              <div>First Name: <span>{this.props.currentUser.FirstName}</span></div>
-              <div>Last Name: <span>{this.props.currentUser.LastName}</span></div>
-              <div>Email: <span>{this.props.currentUser.Email}</span></div>
-              <div>
-              <TextField
               hintText="Enter article's name"
               floatingLabelText="Article name"
               onChange = {(event,newValue) => this.setState({artName:newValue})}
-              />
-            <br/>
-            <TextField
-              hintText="Enter the article's description"
-              floatingLabelText="Description"
-              onChange = {(event,newValue) => this.setState({artDescription:newValue})}
-              />
-            <br/>
-            <TextField
+            />
+          <br/>
+          <TextField
+            hintText="Enter the article's description"
+            floatingLabelText="Description"
+            onChange = {(event,newValue) => this.setState({artDescription:newValue})}
+          />
+          <br/>
+          <TextField
               hintText="Enter Category"
               type="category"
               floatingLabelText="Category"
@@ -510,20 +547,10 @@ class Account extends React.Component{
           </div>*/}
         </div>
                 </div>
-        <ul>
-          <li>
-            <DashboardListItem></DashboardListItem>
-          </li>
-          <li>
-            <DashboardListItem></DashboardListItem>
-          </li>
-          <li>
-            <DashboardListItem></DashboardListItem>
-          </li>
-        </ul>
               
           </div>
           </MuiThemeProvider>
+          </div>
       );
   }
 
@@ -532,8 +559,6 @@ class Account extends React.Component{
     //To be done:check for empty values before hitting submit
     event.preventDefault();
     console.log('handle uploading-', this.state.file);
-
-  
 
     var newArticle = { 
       "Name":this.state.artName,
@@ -552,7 +577,6 @@ class Account extends React.Component{
    
   }
 
-
   _handleImageChange(event) {
     event.preventDefault();
 
@@ -567,7 +591,30 @@ class Account extends React.Component{
     }
 
     reader.readAsDataURL(file)
+  }
 
+  handleNavigation(index){
+    this.setState({currentId:index});
+  }
+}
+
+class MessagesList extends React.Component {
+  
+  render() {
+    return (
+      <div className="messages-wrapper">
+          <div className="container">
+            <div className="breadcrumbs">
+              <span>Home </span>/ 
+              <span> Notifications</span>
+            </div>
+            <div className="article-title">Notifications</div>
+            <div className="content-wrapper">
+              <p>Messages list</p>
+            </div>
+          </div>
+        </div>
+    )
   }
 }
 
@@ -632,8 +679,14 @@ class ArticleDetails extends React.Component {
     super(props);
     this.state = {
       comment:'',
-      rating:''
+      rating:'',
+      article:''
     }
+  }
+
+  componentWillMount() {
+    var articleId = this.props.match.params.id;
+    this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
   }
 
   render() {
@@ -641,36 +694,28 @@ class ArticleDetails extends React.Component {
       <div id="article-wrapper">
         <div className="container">
           <div className="breadcrumbs">
-            <span>Shop </span>/ 
+            <span>Home </span>/ 
             <span> Category </span>/ 
             <span> Item </span>
           </div>
-
-          <div id="article-title">Self Portrait <span>by author name.</span></div>
+          <div className="article-title">{this.state.article.Name} <span>by {this.state.article.Autor}.</span></div>
           <div className="content-wrapper">
-
-            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
-
+            <img id="article-image" src={this.state.article.ImageUrl} />
           </div>
           <div className="content-wrapper">
             <h1>Description</h1>
-            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
-            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
-            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
+            <p>{this.state.article.Category}</p>
+            <p>{this.state.article.Description}</p>
           </div>
           <div className="content-wrapper">
             <h1>Comments and Reviews</h1>
-            <p>THasiodnafbuiasn ausduiasd hasd aasf asfohfashiod fhoasfhioas fasasfasff</p>
-            <p>afuiasu uhasfuiasufhuais fasfauisf hasfasfauasuhfasuhfhasf hasf asasfasf asfasaf</p>
-            <p>asfuiasuifasunauns uiasf uiasfas uiasfasfas uiasf as fuhasif uiasf asfui asasfui</p>
-            
+            <p>Comment List</p>
           </div> 
         </div>
       </div>
     )
   }
 }
-
 
 const style = {
   margin: 15,
