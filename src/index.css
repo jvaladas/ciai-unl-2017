@@ -27,14 +27,6 @@ body {
   font-weight:500;
 }
 
-#store-name:hover::after, .navigation-list li:hover::after, .category-item:hover::after{
-  width:100%;
-}
-
-.active-link{
-  color:red;
-}
-
 #store-name::after, .navigation-list li::after, .category-item::after {
   content:'';
   display: block;
@@ -43,6 +35,10 @@ body {
   background:#5c6bc0;
   transition: width .2s;
   margin-top:3px;
+}
+
+#store-name:hover::after, .navigation-list li:hover::after, .category-item:hover::after{
+  width:100% !important; 
 }
 
 .navigation-list {
@@ -204,4 +200,30 @@ h1{
 }
 .details-item {
   font-weight:600;
+}
+ul#reviews-list {
+  padding-left:5%;
+  width:95%;
+}
+ul#reviews-list li #user {
+  font-weight:600;
+}
+ul#reviews-list li #content {
+  padding:10px 0px;
+}
+ul#reviews-list li div#rating {
+  font-weight:600;
+  padding-right:20px;
+} 
+div.empty-review-list {
+  padding-left:5%;
+  width:95%;
+  font-weight:600;
+}
+.review-wrapper {
+  position: relative;
+  top: 1vh;
+  left: 82%;
+  z-index: 10;
+  width: fit-content;
 }

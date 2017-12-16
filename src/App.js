@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {AppBar, RaisedButton, TextField} from 'material-ui';
-import axios from 'axios';
-import {BrowserRouter,NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {RaisedButton, TextField} from 'material-ui';
+//import axios from 'axios';
+import {NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
+//import FlatButton from 'material-ui/FlatButton';
 import './App.css';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
+//import TransitionGroup from 'react-transition-group/TransitionGroup';
 
 class App extends Component {
   
@@ -60,7 +59,7 @@ class App extends Component {
             "id":6,
             "Name":"The One With Sprinkes",
             "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
-            "ImageUrl": "http://poststudioarts.com/wp-content/uploads/2016/05/art-painting-vangoghrhonecom14.jpg",
+            "ImageUrl": "https://st.hzcdn.com/simgs/9821d30108fa3f90_4-3488/contemporary-paintings.jpg",
             "Category":"Painting",
             "Autor":"j@aol.com"
           },
@@ -96,6 +95,16 @@ class App extends Component {
             "Email": "j@aol.com",
             "Password": "qwerty"
           }
+        ],
+        reviews: [
+          {
+            "id":1,
+            "ArticleId":1,
+            "UserId":1,
+            "Date":"12th November 2017",
+            "Rating":4,
+            "Content":"This picture perfectly describes what you feel when you have to walk all the way home on a rainy day without an umbrella."
+          }
         ]
     }
   }
@@ -117,7 +126,9 @@ class App extends Component {
             collection={this.state.articles.filter(x => x.Autor === this.state.currentUser.Email)} 
             articlesLength={this.state.articles.length} 
           />)}/>
-          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} articles={this.state.articles} />)}/>
+          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} reviews={this.state.reviews} articles={this.state.articles}
+            addReview={(newReview) => this.setState({reviews: this.state.reviews.concat(newReview)})}
+          />)}/>
           <Route path='/messages' render={(props) => <MessagesList />}/>
         </Switch>
 
@@ -213,13 +224,13 @@ class Dashboard extends React.Component {
 			</ol>
 			<div className="carousel-inner">
 				<div className="item active">
-					<img src={require('./assets/018.jpg')} alt="dashboard-image-1" style={imgstyle}/>
+					<img src={require('./assets/018.jpg')} style={imgstyle}/>
 				</div>
 				<div className="item">
-					<img src={require('./assets/017.jpg')} alt="dashboard-image-2" style={imgstyle}/>
+					<img src={require('./assets/017.jpg')} style={imgstyle}/>
 				</div>
         <div className="item">
-          <img src={require('./assets/20.jpg')} alt="dashboard-image-3" style={imgstyle}/>
+          <img src={require('./assets/20.jpg')} style={imgstyle}/>
         </div>
 			</div>
 
@@ -430,7 +441,6 @@ class Register extends React.Component {
   }
 
   handleRegister(event){
-    var self = this;
     var newUser = { 
       "FirstName": this.state.first_name,
       "LastName":this.state.last_name,
@@ -443,12 +453,11 @@ class Register extends React.Component {
   }
 
   handleLogin(event){
-    var self = this;
     var parameters = {
       "Email":this.state.login_email,
       "Password":this.state.login_password
     }
-    this.props.loginUser(this.props.users.find(e => e.Email == parameters.Email && e.Password == parameters.Password));
+    this.props.loginUser(this.props.users.find(e => e.Email === parameters.Email && e.Password === parameters.Password));
     this.setState({fireRedirect : true});
   }
 }
@@ -510,9 +519,9 @@ class Account extends React.Component{
               }
             </ul>
           </div>
-
-          <h4>Add a new item</h4>
-          <div>
+          <div className="content-wrapper">
+            <h1>Add a new item</h1>
+            <div>
             <TextField
               hintText="Enter article's name"
               floatingLabelText="Article name"
@@ -537,25 +546,22 @@ class Account extends React.Component{
             floatingLabelText="External URL"
             onChange = {(event,newValue) => this.setState({externalUrl:newValue})}
           /> 
-            <br/>
-              </div>
-              <div>
-                <div className="previewComponent">
+          </div>
+          <br/>
+            <div>
+              <div className="previewComponent">
                 <form onSubmit={(event)=>this._handleSubmit(event)}>
-                <input className="fileInput" 
-                  type="file" 
-                  onChange={(event)=>this._handleImageChange(event)} />
+                  <input className="fileInput" 
+                    type="file" 
+                    onChange={(event)=>this._handleImageChange(event)} />
                   <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-            </form>
-          {/*<div className="imgPreview">
-            {$imagePreview}
-            </div>*/}
-        </div>
-                </div>
-              
+                </form>
+              </div>
+            </div> 
+          </div> 
           </div>
-          </MuiThemeProvider>
-          </div>
+        </MuiThemeProvider>
+      </div>
       );
   }
 
@@ -681,16 +687,38 @@ class ArticleDetails extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      comment:'',
-      rating:'',
-      article:''
+      reviews:[],
+      article:'',
+      reviewContent:''
     }
   }
 
   componentWillMount() {
     var articleId = this.props.match.params.id;
     this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
+    this.setState({reviews: this.props.reviews.filter(x => x.ArticleId === Number(articleId))});
   }
+
+  handleClick(event){
+    //To be done:check for empty values before hitting submit
+    event.preventDefault();
+
+    var newReview = { 
+      "id":this.props.reviews.length+1,
+      "Rating":3,
+      "Content":this.state.reviewContent,
+      "Date": '16th December 2017',
+      "UserId":this.state.article.UserId,
+      "ArticleId":this.state.article.id
+    }
+
+      this.props.addReview(newReview);
+      this.setState({
+        reviews:this.state.reviews.concat(newReview),
+        reviewContent:''
+      });
+    
+    }
 
   render() {
     return (
@@ -712,11 +740,68 @@ class ArticleDetails extends React.Component {
           </div>
           <div className="content-wrapper">
             <h1>Comments and Reviews</h1>
-            <p>Comment List</p>
+            <ReviewsList reviews={this.state.reviews}></ReviewsList>
+              <MuiThemeProvider>
+                <form onSubmit={(event) => this.handleSubmit(event)}>
+                <div>
+                  <TextField
+                    style={inputStyle}
+                    hintText="Write a review on this piece"
+                    floatingLabelText="Review"
+                    onChange = {(event,newValue) => this.setState({reviewContent:newValue})}
+                  />
+                </div>
+                  <div className="review-wrapper" >
+
+                    <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+                  </div>
+                </form>
+              </MuiThemeProvider>
           </div> 
         </div>
       </div>
     )
+  }
+}
+
+const inputStyle = {
+  width:"90%",
+  padding:"0px 0px 0px 5%"
+}
+
+class ReviewsList extends React.Component {
+
+  render() {
+    var rend;
+
+    if(this.props.reviews.length > 0) {
+      rend = (
+        <ul id="reviews-list">
+          {this.props.reviews.map( (review,index) => 
+            <li key={index}>
+              <div id="user" >By {review.UserId} Antonio, {review.Date}</div>
+              <p id="content" >"{review.Content}"</p>
+              <div id="rating" >{review.Rating}/5 stars</div>
+              <hr />
+            </li>)
+          }
+        </ul>
+      );
+    }
+    else {
+      rend = (
+        <div className="empty-review-list" >
+          No one has commented or reviewed this article yet. You can be the first!
+          <hr />
+        </div>
+      );
+    }
+
+    return rend;
+  }
+
+  handleClick(index){
+    this.setState({currentId:index});
   }
 }
 
