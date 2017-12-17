@@ -190,19 +190,17 @@ h1{
   font-size:22px;
   color:#5c6bc0;
   font-weight:600;
+  padding-bottom:20px;
 }
 .login-form{
   float: right;
   padding-right: 25%;
 }
-#article-image{
-  max-width:75vw;
-}
 .details-item {
   font-weight:600;
 }
 ul#reviews-list {
-  padding-left:5%;
+  padding: 10px 0px 0px 5%;
   width:95%;
 }
 ul#reviews-list li #user {
@@ -227,3 +225,11 @@ div.empty-review-list {
   z-index: 10;
   width: fit-content;
 }
+
+#article-image{
+  max-height:660px;
+  margin:0 auto;
+  display:block;
+  box-shadow:rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+}
+

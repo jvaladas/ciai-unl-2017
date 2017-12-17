@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {RaisedButton, TextField} from 'material-ui';
-//import axios from 'axios';
+import axios from 'axios';
 import {NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 //import FlatButton from 'material-ui/FlatButton';
@@ -15,86 +15,8 @@ class App extends Component {
     this.state={
         currentUser: null,
         articles: [
-          {
-            "id":1,
-            "Name":"Higher Motion",
-            "Description":"Painting, 35.4 H x 23.6 W x 0.8 in",
-            "ImageUrl":"https://i.pinimg.com/originals/26/2d/a4/262da433a20602c80382fea94a8c1c26.jpg",
-            "Category":"Painting",
-            "Autor":"andre@aol.com.br"
-          },
-          {
-            "id":2,
-            "Name":"Portrait",
-            "Description":"Painting, 23.6 H x 19.7 W x 0.8 in",
-            "ImageUrl":"http://www.goddessofegypt.com/wp-content/uploads/2017/06/Abstract-Painting.jpg",
-            "Category":"Painting",
-            "Autor":"andre@aol.com.br"
-          },
-          {
-            "id":3,
-            "Name":"Impeccability of white",
-            "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
-            "ImageUrl": "https://twistedsifter.files.wordpress.com/2014/06/fine-art-finger-paintings-by-iris-scott-3.jpg?w=800&h=800",
-            "Category":"Painting",
-            "Autor":"j@aol.com"
-          },
-          {
-            "id":4,
-            "Name":"Afterglow",
-            "Description":"Painting, 30 H x 24 W x 0.7 in",
-            "ImageUrl": "https://images.fineartamerica.com/images-medium-large-5/blue-venice-dmitry-spiros.jpg",
-            "Category":"Painting",
-            "Autor":"j@aol.com"
-          },
-          {
-            "id":5,
-            "Name":"Three Blue Vases",
-            "Description":"Painting, 24 H x 30 W x 1.5 in",
-            "ImageUrl": "https://images-na.ssl-images-amazon.com/images/I/91MzV6V79DL._SL1500_.jpg",
-            "Category":"Painting",
-            "Autor":"j@aol.com"
-          },
-          {
-            "id":6,
-            "Name":"The One With Sprinkes",
-            "Description":"Painting, 31.5 H x 31.5 W x 0.8 in",
-            "ImageUrl": "https://st.hzcdn.com/simgs/9821d30108fa3f90_4-3488/contemporary-paintings.jpg",
-            "Category":"Painting",
-            "Autor":"j@aol.com"
-          },
-          {
-            "id":7,
-            "Name":"Boating blues 2",
-            "Description":"Painting, 24 H x 30 W x 1.5 in",
-            "ImageUrl": "https://afremov.com/image.php?type=P&id=19255",
-            "Category":"Painting",
-            "Autor":"andre@aol.com.br"
-          },
-          {
-            "id":8,
-            "Name":"Woodland Creature III",
-            "Description":"Painting, 30 H x 24 W x 0.7 in",
-            "ImageUrl": "https://affordableartfair.com/media/cache/1/marketplace/17f82f742ffe127f42dca9de82fb58b1/fair/2/58d3eac4e5b4c.jpg",
-            "Category":"Painting",
-            "Autor":"andre@aol.com.br"
-          }
         ],
         users: [
-          {
-            "id":1,
-            "FirstName":"Andre",
-            "LastName":"Maria",
-            "Email": "andre@aol.com.br",
-            "Password": "123"
-          },
-          {
-            "id":2,
-            "FirstName":"Joao",
-            "LastName":"Carlos",
-            "Email": "j@aol.com",
-            "Password": "qwerty"
-          }
         ],
         reviews: [
           {
@@ -107,6 +29,22 @@ class App extends Component {
           }
         ]
     }
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8080/users')
+      .then(res => {
+        const users = res.data.map(obj => obj);
+        this.setState({users: users})
+      })
+
+      
+    axios.get('http://localhost:8080/articles')
+      .then(res => {
+        const arts = res.data.map(obj => obj);
+        this.setState({articles:arts})
+      })
+    
   }
   
   render(){
@@ -123,7 +61,7 @@ class App extends Component {
             loginUser={(user) => this.setState({currentUser: user})}/> )}/>
           <Route path='/account' render={(props) => ( <Account currentUser={this.state.currentUser}
             updateArt={(newArticle) => this.setState({ articles: this.state.articles.concat(newArticle) })}
-            collection={this.state.articles.filter(x => x.Autor === this.state.currentUser.Email)} 
+            collection={this.state.articles.filter(x => x.authorId === this.state.currentUser.id)} 
             articlesLength={this.state.articles.length} 
           />)}/>
           <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} reviews={this.state.reviews} articles={this.state.articles}
@@ -166,7 +104,7 @@ class Header extends Component {
         <div className="navigation-bar">
         <span id="store-name">
           <NavLink to="/" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-            Store Name
+            Artist Life
           </NavLink>
         </span>
         <ul className="navigation-list" >
@@ -177,7 +115,7 @@ class Header extends Component {
           </li>
           <li>
             <NavLink to="/account" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-              {this.props.currentUser.FirstName}
+              {this.props.currentUser.firstName}
             </NavLink>
           </li>
           <li>
@@ -315,7 +253,7 @@ class DashboardList extends React.Component {
       <ul id="article-list">
         {this.props.articles.map( (article,index) => 
           <li key={index} onClick={() => this.handleClick(article.id)}>
-            <DashboardListItem name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+            <DashboardListItem name={article.name} description={article.description} imgUrl={article.imageUrl}></DashboardListItem>
             {this.state.currentId === article.id && (
               <Redirect to={'/article/'+article.id}/>
             )}
@@ -350,7 +288,7 @@ class DashboardListItem extends React.Component {
         <MuiThemeProvider>
             <Paper onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}
               id="paper-container" style={paperStyle} zDepth={this.state.shadow}>
-              <img className="article-image" src={this.props.imgUrl} alt="article-image"></img>
+              <img className="article-image" src={this.props.imgUrl}  alt="article-image"></img>
               <div id="article-name">{this.props.name}</div>
               <div id="article-description">{this.props.description}</div>
             </Paper>
@@ -442,22 +380,27 @@ class Register extends React.Component {
 
   handleRegister(event){
     var newUser = { 
-      "FirstName": this.state.first_name,
-      "LastName":this.state.last_name,
-      "Email":this.state.email,
-      "Password":this.state.password
+      "firstName": this.state.first_name,
+      "lastName":this.state.last_name,
+      "email":this.state.email,
+      "password":this.state.password,
+      "isArtist":true
     }
-    this.props.updateUsers(newUser);
-    this.props.loginUser(newUser);
-    this.setState({fireRedirect : true});
+
+    axios.post('http://localhost:8080/users', newUser)
+    .then(res => {
+      this.props.updateUsers(newUser);
+      this.props.loginUser(newUser);
+      this.setState({fireRedirect : true});
+    })
   }
 
   handleLogin(event){
     var parameters = {
-      "Email":this.state.login_email,
-      "Password":this.state.login_password
+      "email":this.state.login_email,
+      "password":this.state.login_password
     }
-    this.props.loginUser(this.props.users.find(e => e.Email === parameters.Email && e.Password === parameters.Password));
+    this.props.loginUser(this.props.users.find(e => e.email === parameters.email && e.password === parameters.password));
     this.setState({fireRedirect : true});
   }
 }
@@ -484,6 +427,7 @@ class Account extends React.Component{
     render() {  
       let {imageUrl} = this.state;
       let $imagePreview = null;
+
       if (imageUrl) {
         $imagePreview = (<img src={imageUrl} />);
       } else {
@@ -502,16 +446,16 @@ class Account extends React.Component{
 
           <div className="content-wrapper">
             <h1>Basic Information</h1>
-              <div><span className="details-item">First Name:</span> {this.props.currentUser.FirstName}</div>
-              <div><span className="details-item">Last Name:</span> {this.props.currentUser.LastName}</div>
-              <div><span className="details-item">Email:</span> {this.props.currentUser.Email}</div>
+              <div><span className="details-item">First Name:</span> {this.props.currentUser.firstName}</div>
+              <div><span className="details-item">Last Name:</span> {this.props.currentUser.lastName}</div>
+              <div><span className="details-item">Email:</span> {this.props.currentUser.email}</div>
           </div>
           <div className="content-wrapper">
             <h1>My Collection</h1>
             <ul id="article-list">
               {this.state.artCollection.map( (article,index) => 
                 <li key={index} onClick={() => this.handleNavigation(article.id)}>
-                  <DashboardListItem name={article.Name} description={article.Description} imgUrl={article.ImageUrl}></DashboardListItem>
+                  <DashboardListItem name={article.name} description={article.description} imgUrl={article.imageUrl}></DashboardListItem>
                   {this.state.currentId === article.id && (
                     <Redirect to={'/article/'+article.id}/>
                   )}
@@ -571,10 +515,10 @@ class Account extends React.Component{
 
     var newArticle = { 
       "id":this.props.articlesLength+1,
-      "Name":this.state.artName,
-      "Description":this.state.artDescription,
-      "Category": this.state.category,
-      "Autor":this.state.autor
+      "name":this.state.artName,
+      "description":this.state.artDescription,
+      "category": this.state.category,
+      "authorId":this.state.autor
     }
 
     if(this.state.externalUrl !== '')
@@ -696,7 +640,7 @@ class ArticleDetails extends React.Component {
   componentWillMount() {
     var articleId = this.props.match.params.id;
     this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
-    this.setState({reviews: this.props.reviews.filter(x => x.ArticleId === Number(articleId))});
+    this.setState({reviews: this.props.reviews.filter(x => x.articleId === Number(articleId))});
   }
 
   handleClick(event){
@@ -705,11 +649,11 @@ class ArticleDetails extends React.Component {
 
     var newReview = { 
       "id":this.props.reviews.length+1,
-      "Rating":3,
-      "Content":this.state.reviewContent,
-      "Date": '16th December 2017',
-      "UserId":this.state.article.UserId,
-      "ArticleId":this.state.article.id
+      "rating":3,
+      "content":this.state.reviewContent,
+      "date": '16th December 2017',
+      "userId":this.state.article.userId,
+      "articleId":this.state.article.id
     }
 
       this.props.addReview(newReview);
@@ -729,15 +673,20 @@ class ArticleDetails extends React.Component {
             <span> Category </span>/ 
             <span> Item </span>
           </div>
-          <div className="article-title">{this.state.article.Name} <span>by {this.state.article.Autor}.</span></div>
-          <div className="content-wrapper">
-            <img id="article-image" src={this.state.article.ImageUrl} />
-          </div>
+          <div className="article-title">{this.state.article.name} <span>by {this.state.article.autor}.</span></div>
+          <img id="article-image" src={this.state.article.imageUrl} />  
+          
           <div className="content-wrapper">
             <h1>Description</h1>
-            <p>{this.state.article.Category}</p>
-            <p>{this.state.article.Description}</p>
+            <p>{this.state.article.category}</p>
+            <p>{this.state.article.description}</p>
           </div>
+          
+          <div className="content-wrapper">
+            <h1>Acquisition</h1>
+            <p>In order to acquire this piece, you must first make an offer to the owner with your proposed value. </p>
+          </div>
+
           <div className="content-wrapper">
             <h1>Comments and Reviews</h1>
             <ReviewsList reviews={this.state.reviews}></ReviewsList>
