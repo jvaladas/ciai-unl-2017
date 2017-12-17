@@ -19,14 +19,9 @@ class App extends Component {
         users: [
         ],
         reviews: [
-          {
-            "id":1,
-            "ArticleId":1,
-            "UserId":1,
-            "Date":"12th November 2017",
-            "Rating":4,
-            "Content":"This picture perfectly describes what you feel when you have to walk all the way home on a rainy day without an umbrella."
-          }
+        ],
+        offers: [
+          // id, articleid, authorId, requesterId, value, date
         ]
     }
   }
@@ -44,7 +39,7 @@ class App extends Component {
         const arts = res.data.map(obj => obj);
         this.setState({articles:arts})
       })
-    
+
   }
   
   render(){
@@ -64,7 +59,7 @@ class App extends Component {
             collection={this.state.articles.filter(x => x.authorId === this.state.currentUser.id)} 
             articlesLength={this.state.articles.length} 
           />)}/>
-          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} reviews={this.state.reviews} articles={this.state.articles}
+          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} currentUser={this.state.currentUser} reviews={this.state.reviews} articles={this.state.articles}
             addReview={(newReview) => this.setState({reviews: this.state.reviews.concat(newReview)})}
           />)}/>
           <Route path='/messages' render={(props) => <MessagesList />}/>
@@ -539,6 +534,20 @@ class Account extends React.Component{
 
 class MessagesList extends React.Component {
   
+  constructor(props){
+    super(props);
+    this.state = {
+      messages:[]
+    }
+  }
+
+  componentWillMount() {
+    axios.get('http://localhost:8080/offers?authorId='+this.props.currentUser.id).then((res) => {
+      const mesgs = res.data.map(obj => obj);
+      this.setState({messages:mesgs});
+    })
+  }
+
   render() {
     return (
       <div className="messages-wrapper">
@@ -626,7 +635,10 @@ class ArticleDetails extends React.Component {
 
   componentWillMount() {
     var articleId = this.props.match.params.id;
-    this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
+
+    axios.get('http://localhost:8080/articles/'+articleId).then((res) => {
+      this.setState({article:res.data});
+    })
 
     axios.get('http://localhost:8080/reviews?articleId='+articleId)
     .then((res) => {
@@ -641,10 +653,15 @@ class ArticleDetails extends React.Component {
     console.log(event);
 
     var newOffer = {
- 
+      "articleId":this.state.article.id,
+      "authorId":this.state.article.authorId,
+      "requesterId":this.props.currentUser.id,
+      "value":this.state.offerValue
     }
 
+    axios.post('http://localhost:8080/offers', newOffer).then((res) => {
 
+    }); 
 
   }
 
