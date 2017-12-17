@@ -189,9 +189,6 @@ class Dashboard extends React.Component {
         <div className="container">
           <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
-          <ListFilters filterName="price"></ListFilters>
-          <div className="fix-space"></div>
-          <div className="fix-space"></div>
           <div className="fix-space"></div>
           <div className="fix-space"></div>
           <div className="fix-space"></div>
@@ -205,18 +202,7 @@ class ListFilters extends React.Component {
   
   render() {
     var elem = null;
-    if(this.props.filterName === "price"){
-      elem = (
-        <div className="list-filters-container" >
-          <h1>Browse Art by Price</h1>
-          <span className="category-item">100€ </span>
-          <span className="category-item">500€</span>
-          <span className="category-item">1500€</span>
-          <span className="category-item">2500€</span>
-        </div>
-      );
-    }
-    else if(this.props.filterName === "category"){
+    if(this.props.filterName === "category"){
       elem = (
         <div className="list-filters-container" >
           <h1>Browse Art by Category</h1>
@@ -633,7 +619,8 @@ class ArticleDetails extends React.Component {
     this.state = {
       reviews:[],
       article:'',
-      reviewContent:''
+      reviewContent:'',
+      offerValue:0
     }
   }
 
@@ -646,6 +633,18 @@ class ArticleDetails extends React.Component {
       const revs = res.data.map(obj => obj);
       this.setState({reviews:revs})
     })
+
+  }
+
+  handleOfferClick(event){
+    event.preventDefault();
+    console.log(event);
+
+    var newOffer = {
+ 
+    }
+
+
 
   }
 
@@ -693,6 +692,17 @@ class ArticleDetails extends React.Component {
           <div className="content-wrapper">
             <h1>Acquisition</h1>
             <p>In order to acquire this piece, you must first make an offer to the owner with your proposed value. </p>
+            <form onSubmit={(event) => this.handleOfferSubmit(event)}>
+              <MuiThemeProvider>
+                <TextField
+                  style={offerInputStyle}
+                  hintText="Propose a value to acquire this piece."
+                  floatingLabelText="Offer value"
+                  onChange = {(event,newValue) => this.setState({offerValue:newValue})}
+                />
+                <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleOfferClick(event)}/>
+              </MuiThemeProvider>
+            </form>
           </div>
 
           <div className="content-wrapper">
@@ -703,13 +713,12 @@ class ArticleDetails extends React.Component {
                 <div>
                   <TextField
                     style={inputStyle}
-                    hintText="Write a review on this piece"
+                    hintText="Write a review on this piece."
                     floatingLabelText="Review"
                     onChange = {(event,newValue) => this.setState({reviewContent:newValue})}
                   />
                 </div>
                   <div className="review-wrapper" >
-
                     <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
                   </div>
                 </form>
@@ -720,7 +729,12 @@ class ArticleDetails extends React.Component {
     )
   }
 }
-
+const offerInputStyle = {
+  width:"50%",
+  display:"inline-block",
+  padding:"0px 0px 0px 5%",
+  margin:"0px 60px 0px 0px"
+}
 const inputStyle = {
   width:"90%",
   padding:"0px 0px 0px 5%"
