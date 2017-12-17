@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,15 +26,11 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	    @ElementCollection
 	    List<String> tags;
 	    
-	    @ElementCollection
-	    List<Review> reviews;
-	    
-	    
 	    boolean forsale;
 
 	    public ArtPiece() {}
 
-	    public ArtPiece(int id,String name, String description, String ImageUrl, String owner, List<String> tags, int AuthorId, List<Review> reviews) {
+	    public ArtPiece(int id,String name, String description, String ImageUrl, String owner, List<String> tags, int AuthorId) {
 	        this.id = id;
 	        this.description = description;
 	        this.creationDate = System.currentTimeMillis();
@@ -43,7 +40,6 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	        this.forsale = false;
 	        this.ImageUrl = ImageUrl;
 	        this.Name = name;
-	        this.reviews = reviews;
 	    }
 
 	    public int getId() {
@@ -118,15 +114,7 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	    {
 	    	this.Name = name;
 	    }
-	    
-	    public void setReviews(List<Review> reviews) {
-	    	this.reviews = reviews;
-	    }
-	    
-	    public List<Review> getReviews() { 
-	    	return reviews;
-	    }
-	    
+
 	    public static void valid(ArtPiece a) {
 	        if( a.getDescription() == null ||
 	            a.getCreationDate() == -1 ) {

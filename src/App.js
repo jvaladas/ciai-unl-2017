@@ -640,7 +640,13 @@ class ArticleDetails extends React.Component {
   componentWillMount() {
     var articleId = this.props.match.params.id;
     this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
-    this.setState({reviews: this.props.reviews.filter(x => x.articleId === Number(articleId))});
+
+    axios.get('http://localhost:8080/reviews?articleId='+articleId)
+    .then((res) => {
+      const revs = res.data.map(obj => obj);
+      this.setState({reviews:revs})
+    })
+
   }
 
   handleClick(event){
@@ -650,17 +656,19 @@ class ArticleDetails extends React.Component {
     var newReview = { 
       "id":this.props.reviews.length+1,
       "rating":3,
-      "content":this.state.reviewContent,
-      "date": '16th December 2017',
+      "description":this.state.reviewContent,
+      "date": new Date().getTime(),
       "userId":this.state.article.userId,
       "articleId":this.state.article.id
     }
-
-      this.props.addReview(newReview);
-      this.setState({
-        reviews:this.state.reviews.concat(newReview),
-        reviewContent:''
-      });
+ 
+      axios.post('http://localhost:8080/reviews', newReview).then((res) => {
+        this.props.addReview(newReview);
+        this.setState({
+          reviews:this.state.reviews.concat(newReview),
+          reviewContent:''
+        });
+      })
     
     }
 
@@ -673,7 +681,7 @@ class ArticleDetails extends React.Component {
             <span> Category </span>/ 
             <span> Item </span>
           </div>
-          <div className="article-title">{this.state.article.name} <span>by {this.state.article.autor}.</span></div>
+          <div className="article-title">{this.state.article.name} <span>by {this.state.article.authorId}.</span></div>
           <img id="article-image" src={this.state.article.imageUrl} />  
           
           <div className="content-wrapper">
@@ -728,9 +736,9 @@ class ReviewsList extends React.Component {
         <ul id="reviews-list">
           {this.props.reviews.map( (review,index) => 
             <li key={index}>
-              <div id="user" >By {review.UserId} Antonio, {review.Date}</div>
-              <p id="content" >"{review.Content}"</p>
-              <div id="rating" >{review.Rating}/5 stars</div>
+              <div id="user" >By {review.userId} Antonio, {review.date}</div>
+              <p id="content" >"{review.description}"</p>
+              <div id="rating" >{review.rating}/5 stars</div>
               <hr />
             </li>)
           }

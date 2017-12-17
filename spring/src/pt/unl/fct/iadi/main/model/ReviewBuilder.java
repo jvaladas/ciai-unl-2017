@@ -8,11 +8,6 @@ public class ReviewBuilder {
 		review = new Review();
 	}
 	
-	public ReviewBuilder id( int id) {
-		review.setId(id);
-		return this;
-	}
-	
 	public ReviewBuilder date(long date) {
 		review.setDate(date);
 		return this;
