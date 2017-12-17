@@ -189,9 +189,6 @@ class Dashboard extends React.Component {
         <div className="container">
           <ListFilters filterName="category"></ListFilters>
           <DashboardList articles={this.props.articles}></DashboardList>
-          <ListFilters filterName="price"></ListFilters>
-          <div className="fix-space"></div>
-          <div className="fix-space"></div>
           <div className="fix-space"></div>
           <div className="fix-space"></div>
           <div className="fix-space"></div>
@@ -205,18 +202,7 @@ class ListFilters extends React.Component {
   
   render() {
     var elem = null;
-    if(this.props.filterName === "price"){
-      elem = (
-        <div className="list-filters-container" >
-          <h1>Browse Art by Price</h1>
-          <span className="category-item">100€ </span>
-          <span className="category-item">500€</span>
-          <span className="category-item">1500€</span>
-          <span className="category-item">2500€</span>
-        </div>
-      );
-    }
-    else if(this.props.filterName === "category"){
+    if(this.props.filterName === "category"){
       elem = (
         <div className="list-filters-container" >
           <h1>Browse Art by Category</h1>
@@ -633,14 +619,33 @@ class ArticleDetails extends React.Component {
     this.state = {
       reviews:[],
       article:'',
-      reviewContent:''
+      reviewContent:'',
+      offerValue:0
     }
   }
 
   componentWillMount() {
     var articleId = this.props.match.params.id;
     this.setState({article: this.props.articles.find(x => x.id === Number(articleId))});
-    this.setState({reviews: this.props.reviews.filter(x => x.articleId === Number(articleId))});
+
+    axios.get('http://localhost:8080/reviews?articleId='+articleId)
+    .then((res) => {
+      const revs = res.data.map(obj => obj);
+      this.setState({reviews:revs})
+    })
+
+  }
+
+  handleOfferClick(event){
+    event.preventDefault();
+    console.log(event);
+
+    var newOffer = {
+ 
+    }
+
+
+
   }
 
   handleClick(event){
@@ -650,17 +655,19 @@ class ArticleDetails extends React.Component {
     var newReview = { 
       "id":this.props.reviews.length+1,
       "rating":3,
-      "content":this.state.reviewContent,
-      "date": '16th December 2017',
+      "description":this.state.reviewContent,
+      "date": new Date().getTime(),
       "userId":this.state.article.userId,
       "articleId":this.state.article.id
     }
-
-      this.props.addReview(newReview);
-      this.setState({
-        reviews:this.state.reviews.concat(newReview),
-        reviewContent:''
-      });
+ 
+      axios.post('http://localhost:8080/reviews', newReview).then((res) => {
+        this.props.addReview(newReview);
+        this.setState({
+          reviews:this.state.reviews.concat(newReview),
+          reviewContent:''
+        });
+      })
     
     }
 
@@ -673,7 +680,7 @@ class ArticleDetails extends React.Component {
             <span> Category </span>/ 
             <span> Item </span>
           </div>
-          <div className="article-title">{this.state.article.name} <span>by {this.state.article.autor}.</span></div>
+          <div className="article-title">{this.state.article.name} <span>by {this.state.article.authorId}.</span></div>
           <img id="article-image" src={this.state.article.imageUrl} />  
           
           <div className="content-wrapper">
@@ -685,6 +692,17 @@ class ArticleDetails extends React.Component {
           <div className="content-wrapper">
             <h1>Acquisition</h1>
             <p>In order to acquire this piece, you must first make an offer to the owner with your proposed value. </p>
+            <form onSubmit={(event) => this.handleOfferSubmit(event)}>
+              <MuiThemeProvider>
+                <TextField
+                  style={offerInputStyle}
+                  hintText="Propose a value to acquire this piece."
+                  floatingLabelText="Offer value"
+                  onChange = {(event,newValue) => this.setState({offerValue:newValue})}
+                />
+                <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleOfferClick(event)}/>
+              </MuiThemeProvider>
+            </form>
           </div>
 
           <div className="content-wrapper">
@@ -695,13 +713,12 @@ class ArticleDetails extends React.Component {
                 <div>
                   <TextField
                     style={inputStyle}
-                    hintText="Write a review on this piece"
+                    hintText="Write a review on this piece."
                     floatingLabelText="Review"
                     onChange = {(event,newValue) => this.setState({reviewContent:newValue})}
                   />
                 </div>
                   <div className="review-wrapper" >
-
                     <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
                   </div>
                 </form>
@@ -712,7 +729,12 @@ class ArticleDetails extends React.Component {
     )
   }
 }
-
+const offerInputStyle = {
+  width:"50%",
+  display:"inline-block",
+  padding:"0px 0px 0px 5%",
+  margin:"0px 60px 0px 0px"
+}
 const inputStyle = {
   width:"90%",
   padding:"0px 0px 0px 5%"
@@ -728,9 +750,9 @@ class ReviewsList extends React.Component {
         <ul id="reviews-list">
           {this.props.reviews.map( (review,index) => 
             <li key={index}>
-              <div id="user" >By {review.UserId} Antonio, {review.Date}</div>
-              <p id="content" >"{review.Content}"</p>
-              <div id="rating" >{review.Rating}/5 stars</div>
+              <div id="user" >By {review.userId} Antonio, {review.date}</div>
+              <p id="content" >"{review.description}"</p>
+              <div id="rating" >{review.rating}/5 stars</div>
               <hr />
             </li>)
           }

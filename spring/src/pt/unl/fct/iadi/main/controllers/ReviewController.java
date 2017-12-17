@@ -10,37 +10,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pt.unl.fct.iadi.main.model.ArtPiece;
+import pt.unl.fct.iadi.main.model.Review;
 import pt.unl.fct.iadi.main.services.ArtServiceImpl;
+import pt.unl.fct.iadi.main.services.ReviewServiceImpl;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping(value="/articles")
-public class ArtController {
+@RequestMapping(value="/reviews")
+public class ReviewController {
 	
 	    @Autowired
-	    ArtServiceImpl arts;
+	    ReviewServiceImpl reviews;
 
 	    @RequestMapping(value="", method= RequestMethod.GET)
-	    ArtPiece[] getAll(@RequestParam(required=false, value="") String search) {
-	        return search == null || search.equals("") // just in case
+	    Review[] getAll(@RequestParam(required=false, value="") String articleId) {
+	        return articleId == null || articleId.equals("") // just in case
 	                ?
-	                arts.findAll()
+	                		reviews.findAll()
 	                :
-	                arts.findWithDescription(search);
+	                	reviews.findWithArticleId(Integer.parseInt(articleId));
 	    }
 
 
 	    @RequestMapping(value="", method = RequestMethod.POST)
-	    void createArt(@RequestBody ArtPiece a) {
-	        ArtPiece.valid(a);
-	        arts.create(a);
+	    void createReview(@RequestBody Review a) {
+	        Review.valid(a);
+	        reviews.create(a);
 	    }
 
 
 	    @RequestMapping(value="/{id}", method = RequestMethod.GET)
-	    ArtPiece showArt(@PathVariable int id) {
-	        ArtPiece a = arts.findById(id);
+	    Review showReview(@PathVariable int id) {
+	        Review a = reviews.findById(id);
 	        Preconditions.checkFound(a);
 
 	        return a;
@@ -48,21 +50,21 @@ public class ArtController {
 
 
 	    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
-	    void updateArt(@PathVariable int id, @RequestBody ArtPiece a) {
+	    void updateReview(@PathVariable int id, @RequestBody Review a) {
 	        Preconditions.checkCondition(a.getId()==id);
-	    	ArtPiece a2 = arts.findById(id);
+	    	Review a2 = reviews.findById(id);
 	    	Preconditions.checkFound(a2);
-	        ArtPiece.valid(a);
+	        Review.valid(a);
 	        
-	        arts.update(a);
+	        reviews.update(a);
 	    }
 
 
 	    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	    void deleteArt(@PathVariable int id) {
-	        ArtPiece a = arts.findById(id);
+	    void deleteReview(@PathVariable int id) {
+	        Review a = reviews.findById(id);
 	        Preconditions.checkFound(a);
-	        arts.remove(id);
+	        reviews.remove(id);
 	    }
 	   
 	    

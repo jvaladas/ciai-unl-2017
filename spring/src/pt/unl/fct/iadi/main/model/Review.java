@@ -1,5 +1,6 @@
 package pt.unl.fct.iadi.main.model;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -7,33 +8,23 @@ import javax.persistence.Id;
 @Entity
 public class Review {
 
-	@Id
+ 	@Id
     @GeneratedValue
     int id;
 	int articleId;
 	int userId;
 	long date;
 	int rating;
-	String content;
 	String description;
 	
 	public Review() {}
 	
-	public Review(int id, int articleId, int userId, long date, int rating, String content) {
-		this.id = id;
+	public Review(int articleId, int userId, long date, int rating, String description) {
 		this.articleId = articleId;
 		this.userId = userId;
 		this.date = date;
 		this.rating = rating; 
-		this.content = content;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
+		this.description = description;
 	}
 	
 	public void setDate(long date) {
@@ -55,6 +46,38 @@ public class Review {
 	public static void valid(Review r) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public Integer getArticleId() {
+		return articleId;
+	}
+	
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
+	}
+	
+	public Integer getRating() {
+		return rating;
+	}
+	
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	
+	public Integer getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 	
