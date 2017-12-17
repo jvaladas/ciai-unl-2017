@@ -16,36 +16,34 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	 	@Id
 	    @GeneratedValue
 	    int id;
-	 	
 	 	String Name;
-	 	
 	    String description;
-
 	    long creationDate;
-
 	    String owner;
-	    
-	    int AuthorId;
-	    
+	    int authorId;
 	    String ImageUrl;
-	    
 	    @ElementCollection
 	    List<String> tags;
+	    
+	    @ElementCollection
+	    List<Review> reviews;
+	    
 	    
 	    boolean forsale;
 
 	    public ArtPiece() {}
 
-	    public ArtPiece(int id,String name, String description, String ImageUrl, String owner, List<String> tags, int AuthorId) {
+	    public ArtPiece(int id,String name, String description, String ImageUrl, String owner, List<String> tags, int AuthorId, List<Review> reviews) {
 	        this.id = id;
 	        this.description = description;
 	        this.creationDate = System.currentTimeMillis();
-	        this.AuthorId = AuthorId;
+	        this.authorId = AuthorId;
 	        this.owner = owner;
 	        this.tags = tags;
 	        this.forsale = false;
 	        this.ImageUrl = ImageUrl;
 	        this.Name = name;
+	        this.reviews = reviews;
 	    }
 
 	    public int getId() {
@@ -80,6 +78,10 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	        this.owner = owner;
 	    }
 	    
+	    public void setTags(List<String> tags) {
+	    	this.tags = tags;
+	    }
+	    
 	    public List<String> getTags() {
 	        return tags;
 	    }
@@ -101,11 +103,11 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	    }
 	    
 	    public int getAuthorId() {
-	    	return this.AuthorId;
+	    	return this.authorId;
 	    }
 	    
 	    public void AuthorId(int id) {
-	    	this.AuthorId = id;
+	    	this.authorId = id;
 	    }
 	    
 	    public String getName() {
@@ -115,6 +117,14 @@ import pt.unl.fct.iadi.main.exceptions.BrokenPrecondition;
 	    public void setName(String name)
 	    {
 	    	this.Name = name;
+	    }
+	    
+	    public void setReviews(List<Review> reviews) {
+	    	this.reviews = reviews;
+	    }
+	    
+	    public List<Review> getReviews() { 
+	    	return reviews;
 	    }
 	    
 	    public static void valid(ArtPiece a) {

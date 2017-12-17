@@ -1,7 +1,5 @@
 package pt.unl.fct.iadi.main.model;
 
-import java.util.Date;
-
 public class ArtBuilder {
 
     private ArtPiece art;

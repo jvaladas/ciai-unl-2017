@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pt.unl.fct.iadi.main.model.ArtPiece;
-import pt.unl.fct.iadi.main.model.Task;
 import pt.unl.fct.iadi.main.services.ArtServiceImpl;
-import pt.unl.fct.iadi.main.services.TaskService;
 
 
 @RestController
@@ -67,5 +65,7 @@ public class ArtController {
 	        Preconditions.checkFound(a);
 	        arts.remove(id);
 	    }
+	   
+	    
 	
 }

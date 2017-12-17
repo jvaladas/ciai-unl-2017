@@ -10,14 +10,9 @@ import org.springframework.stereotype.Service;
 import pt.unl.fct.iadi.main.model.ArtPiece;
 import pt.unl.fct.iadi.main.model.ArtRepository;
 
-
-
-
-
 @Service
 public class ArtServiceImpl implements ArtService {
 	
-
 		@Autowired
 	    ArtRepository repository;
 
