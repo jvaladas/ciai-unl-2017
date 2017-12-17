@@ -59,7 +59,7 @@ class App extends Component {
             collection={this.state.articles.filter(x => x.authorId === this.state.currentUser.id)} 
             articlesLength={this.state.articles.length} 
           />)}/>
-          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} currentUser={this.state.currentUser} reviews={this.state.reviews} articles={this.state.articles}
+          <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} users={this.state.users} currentUser={this.state.currentUser} 
             addReview={(newReview) => this.setState({reviews: this.state.reviews.concat(newReview)})}
           />)}/>
           <Route path='/messages' render={(props) => <MessagesList />}/>
@@ -131,7 +131,6 @@ class Header extends Component {
   }
 
 }
-
 
 class Footer extends React.Component {
   render(){
@@ -629,7 +628,8 @@ class ArticleDetails extends React.Component {
       reviews:[],
       article:'',
       reviewContent:'',
-      offerValue:0
+      offerValue:0,
+      author:''
     }
   }
 
@@ -637,7 +637,12 @@ class ArticleDetails extends React.Component {
     var articleId = this.props.match.params.id;
 
     axios.get('http://localhost:8080/articles/'+articleId).then((res) => {
-      this.setState({article:res.data});
+      const art = res.data;
+      this.setState({article:art});
+
+      axios.get('http://localhost:8080/users/'+art.authorId).then((res) => {
+        this.setState({author:res.data});
+      })
     })
 
     axios.get('http://localhost:8080/reviews?articleId='+articleId)
@@ -670,7 +675,6 @@ class ArticleDetails extends React.Component {
     event.preventDefault();
 
     var newReview = { 
-      "id":this.props.reviews.length+1,
       "rating":3,
       "description":this.state.reviewContent,
       "date": new Date().getTime(),
@@ -697,7 +701,7 @@ class ArticleDetails extends React.Component {
             <span> Category </span>/ 
             <span> Item </span>
           </div>
-          <div className="article-title">{this.state.article.name} <span>by {this.state.article.authorId}.</span></div>
+          <div className="article-title">{this.state.article.name} <span>by {this.state.author.firstName} {this.state.author.lastName}.</span></div>
           <img id="article-image" src={this.state.article.imageUrl} />  
           
           <div className="content-wrapper">
@@ -724,7 +728,7 @@ class ArticleDetails extends React.Component {
 
           <div className="content-wrapper">
             <h1>Comments and Reviews</h1>
-            <ReviewsList reviews={this.state.reviews}></ReviewsList>
+            <ReviewsList users={this.props.users} reviews={this.state.reviews}></ReviewsList>
               <MuiThemeProvider>
                 <form onSubmit={(event) => this.handleSubmit(event)}>
                 <div>
@@ -759,6 +763,25 @@ const inputStyle = {
 
 class ReviewsList extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      users:[]
+    }
+  }
+
+  getUserById(id){
+    if(id === 0)
+      return "Unknown";
+
+    let user = this.props.users.filter(x => x.id === id)[0];
+    return user.firstName + " " + user.lastName;
+  }
+
+  getReviewDate(date){
+    return date;
+  }
+
   render() {
     var rend;
 
@@ -767,7 +790,7 @@ class ReviewsList extends React.Component {
         <ul id="reviews-list">
           {this.props.reviews.map( (review,index) => 
             <li key={index}>
-              <div id="user" >By {review.userId} Antonio, {review.date}</div>
+              <div id="user" >By {this.getUserById(review.userId)}, {this.getReviewDate(review.date)}</div>
               <p id="content" >"{review.description}"</p>
               <div id="rating" >{review.rating}/5 stars</div>
               <hr />
