@@ -4,6 +4,8 @@ import {RaisedButton, TextField} from 'material-ui';
 import axios from 'axios';
 import {NavLink, Switch, Route,Redirect, withRouter} from 'react-router-dom';
 import Paper from 'material-ui/Paper';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 //import FlatButton from 'material-ui/FlatButton';
 import './App.css';
 //import TransitionGroup from 'react-transition-group/TransitionGroup';
@@ -62,7 +64,8 @@ class App extends Component {
           <Route path='/article/:id' render={(props) => (<ArticleDetails {...props} users={this.state.users} currentUser={this.state.currentUser} 
             addReview={(newReview) => this.setState({reviews: this.state.reviews.concat(newReview)})}
           />)}/>
-          <Route path='/messages' render={(props) => <MessagesList />}/>
+          <Route path='/messages' render={(props) => <MessagesList users={this.state.users} articles={this.state.articles} 
+          currentUser={this.state.currentUser} />}/>
         </Switch>
 
         <Footer></Footer>
@@ -87,7 +90,7 @@ class Header extends Component {
           <ul className="navigation-list" >
             <li>
               <NavLink to="/signup" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
-                Sign up
+                Sign up / Register
               </NavLink>
             </li>
           </ul>
@@ -106,6 +109,11 @@ class Header extends Component {
           <li>
             <NavLink to="/messages" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
               Notifications
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/my-artwork" activeClassName="active-link" style={{color:'white', textDecoration:'none'}}>
+              Owned Artwork
             </NavLink>
           </li>
           <li>
@@ -200,6 +208,7 @@ class ListFilters extends React.Component {
       elem = (
         <div className="list-filters-container" >
           <h1>Browse Art by Category</h1>
+          <span className="category-item">All</span> 
           <span className="category-item">Paintings</span>
           <span className="category-item">Drawings</span>
           <span className="category-item">Photography</span>
@@ -557,11 +566,90 @@ class MessagesList extends React.Component {
             </div>
             <div className="article-title">Notifications</div>
             <div className="content-wrapper">
-              <p>Messages list</p>
+              <h1>Current Offers</h1>
+              <OffersList removeOffer={(oldOffer) => this.setState({ messages: this.state.messages.filter(x => x.id !== oldOffer.id) })}
+              articles={this.props.articles} users={this.props.users} offers={this.state.messages}></OffersList>
             </div>
           </div>
         </div>
     )
+  }
+}
+
+class OffersList extends React.Component {
+
+  getUserById(id) {
+    if(id === 0 || id === undefined)
+      return "Unknown";
+
+    let user = this.props.users.filter(x => x.id === id)[0];
+      return user.firstName + " " + user.lastName;
+  }
+
+  getOfferDate(date) {
+    return date;
+  }
+
+  getArticleById(id){
+    return this.props.articles.filter(x => x.id === id )[0];
+  }
+
+  handleAcceptClick(offer){
+    let article = this.props.articles.filter(x => x.id === offer.articleId)[0];
+    article.ownerId = offer.requesterId;  // set requester as owner
+
+    // update article
+    axios.put('http://localhost:8080/articles/'+article.id, article).then((res) => {
+
+      axios.delete('http://localhost:8080/offers/'+offer.id).then((res2) => {
+        this.props.removeOffer(offer);
+        // remove from frontend
+      })
+
+    })
+
+  }
+
+  handleCancelClick(offer) {
+    axios.delete('http://localhost:8080/offers/'+offer.id).then((res) => {
+      //remove from frontend
+      this.props.removeOffer(offer);
+    })
+  }
+
+  render() {
+    var view;
+    
+    if(this.props.offers.length > 0) {
+      view = (
+        <ul className="notifications-list" >
+           {this.props.offers.map( (offer,index) => 
+              <li key={index}>
+                <span >
+                  <img width="80px" src={this.getArticleById(offer.articleId).imageUrl} />
+                </span>
+                <span className="details-wrapper">
+                  <div id="title" >{this.getArticleById(offer.articleId).name}</div>
+                  <div id="user" >By {this.getUserById(offer.requesterId)}, {this.getOfferDate(offer.date)}</div>
+                  <p id="content" >{offer.value} €</p>
+                </span>
+                <span className="actions-wrapper">
+                <MuiThemeProvider>
+                    <RaisedButton type="submit" label="Accept Offer" primary={true} style={style} onClick={() => this.handleAcceptClick(offer)}/>
+                    <RaisedButton type="submit" label="Decline" primary={true} style={style} onClick={() => this.handleCancelClick(offer)}/>
+                  </MuiThemeProvider>
+                </span>
+                <hr />
+          </li>)}
+        </ul>
+      )
+    }
+    else {
+      view = (
+        <div>You currently do not have any notifications.</div>
+      )
+    }
+    return view;
   }
 }
 
@@ -629,7 +717,8 @@ class ArticleDetails extends React.Component {
       article:'',
       reviewContent:'',
       offerValue:0,
-      author:''
+      author:'',
+      rating:0
     }
   }
 
@@ -675,22 +764,22 @@ class ArticleDetails extends React.Component {
     event.preventDefault();
 
     var newReview = { 
-      "rating":3,
+      "rating":this.state.rating,
       "description":this.state.reviewContent,
       "date": new Date().getTime(),
-      "userId":this.state.article.userId,
+      "userId":this.props.currentUser.id,
       "articleId":this.state.article.id
     }
  
       axios.post('http://localhost:8080/reviews', newReview).then((res) => {
         this.props.addReview(newReview);
         this.setState({
-          reviews:this.state.reviews.concat(newReview),
-          reviewContent:''
+          reviews:this.state.reviews.concat(newReview)
         });
       })
-    
     }
+
+  handleRatingChange = (event, index, value) => this.setState({rating: value});
 
   render() {
     return (
@@ -740,6 +829,17 @@ class ArticleDetails extends React.Component {
                   />
                 </div>
                   <div className="review-wrapper" >
+                    <SelectField
+                      floatingLabelText="Rating"
+                      value={this.state.rating}
+                      onChange={this.handleRatingChange}
+                    >
+                      <MenuItem value={1} primaryText="1 star" />
+                      <MenuItem value={2} primaryText="2 stars" />
+                      <MenuItem value={3} primaryText="3 stars" />
+                      <MenuItem value={4} primaryText="4 stars" />
+                      <MenuItem value={5} primaryText="5 stars" />
+                    </SelectField>
                     <RaisedButton type="submit" label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
                   </div>
                 </form>

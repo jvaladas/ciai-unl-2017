@@ -221,7 +221,7 @@ div.empty-review-list {
 .review-wrapper {
   position: relative;
   top: 1vh;
-  left: 82%;
+  left: 5%;
   z-index: 10;
   width: fit-content;
 }
@@ -233,3 +233,15 @@ div.empty-review-list {
   box-shadow:rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
 
+.notifications-list .details-wrapper {
+  display:inline-block;
+  padding-left:20px;
+  vertical-align:middle;
+}
+.notifications-list .details-wrapper div#title {
+  font-weight:600;
+  font-size:16px;
+}
+.notifications-list .actions-wrapper {
+  padding-left:14%;
+}
