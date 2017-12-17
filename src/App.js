@@ -53,6 +53,8 @@ class App extends Component {
 
         <Switch>
           <Route exact path='/' render={(props) => (<Dashboard articles={this.state.articles}/>)}/>
+          <Route path='/my-artwork' render={(props) => <MyArtwork articles={this.state.articles} 
+          currentUser={this.state.currentUser} />}/>
           <Route path='/signup' render={(props) => (<Register users={this.state.users}
             updateUsers={(newUser) => this.setState({ users: this.state.users.concat(newUser) })}
             loginUser={(user) => this.setState({currentUser: user})}/> )}/>
@@ -146,6 +148,36 @@ class Footer extends React.Component {
       <div className="footer-wrapper">
         <div className="container">
           <p>This project is part of the course on Web Applications Development at FCT UNL - Fall 2017.</p>
+        </div>
+      </div>
+    )
+  }
+}
+
+class MyArtwork extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      collection:this.props.articles.filter(x => x.ownerId === this.props.currentUser.id)
+    }
+  }
+
+  render() {
+    return (
+      <div className="account-wrapper">
+        <div className="container">
+          <div className="breadcrumbs">
+            <span>Home </span>/
+            <span> Purchases</span>
+          </div>
+          <div className="article-title">My Artwork</div>
+          <div className="content-wrapper">
+            <h1>Recent Purchases</h1>
+            <ul id="article-list">
+
+            </ul>
+          </div>
         </div>
       </div>
     )
@@ -662,7 +694,6 @@ class ImageUpload extends React.Component {
 
   _handleSubmit(e) {
     e.preventDefault();
-    // TODO: do something with -> this.state.file
     console.log('handle uploading-', this.state.file);
   }
 
